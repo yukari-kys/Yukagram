@@ -36,11 +36,6 @@
 	path = app/jni/third_party/libvpx
 	url = https://github.com/webmproject/libvpx
 	shallow = true
-[submodule "tdlib"]
-	path = tdlib
-	url = https://github.com/TGX-Android/tdlib
-	shallow = true
-	branch = main
 [submodule "jni-utils"]
 	path = app/jni/third_party/jni-utils
 	url = https://github.com/TGX-Android/jni-utils
@@ -111,3 +106,11 @@
 [submodule "vkryl/leveldb/jni/jni-utils"]
 	path = vkryl/leveldb/jni/jni-utils
 	url = https://github.com/TGX-Android/jni-utils
+[submodule "td"]
+	path = td
+	url = https://github.com/tdlib/td
+[submodule "libressl"]
+	path = libressl
+	url = https://github.com/libressl/portable
+	shallow = true
+	branch = master
