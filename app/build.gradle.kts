@@ -1,6 +1,5 @@
 @file:Suppress("UnstableApiUsage", "AvoidApplyPluginMethod")
 
-import androidx.baselineprofile.gradle.consumer.BaselineProfileConsumerExtension
 import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.BuildConfigField
 import com.android.build.api.variant.impl.VariantOutputImpl
@@ -19,7 +18,6 @@ plugins {
 }
 
 val config = tgxConfig.config.get()
-val generateBaselineProfile = tgxConfig.generateBaselineProfile.get()
 val useLegacyNdk = tgxConfig.useLegacyNdk.get()
 val appliedNdkVersion = if (useLegacyNdk) {
   config.build.legacyNdkVersion
@@ -525,9 +523,6 @@ android {
         dimension = "SDK"
         isDefault = sdkIndex == Sdk.LATEST
 
-        if (generateBaselineProfile && !variant.isLatest) {
-          matchingFallbacks += Sdk.VARIANTS[Sdk.LATEST]!!.flavor
-        }
         Sdk.VARIANTS.forEach { (subSdkIndex, subVariant) ->
           buildConfigBool("${subVariant.flavor.uppercase()}_FLAVOR", sdkIndex == subSdkIndex)
         }
@@ -641,15 +636,12 @@ android {
     }
 
     Abi.VARIANTS.filter { (abiIndex, variant) ->
-      (generateBaselineProfile || !variant.isTestingLab)
+      (!variant.isTestingLab)
     }.forEach { (abiIndex, variant) ->
       create(variant.flavor) {
         dimension = "ABI"
         isDefault = abiIndex == 0
 
-        if (generateBaselineProfile && !variant.isTestingLab) {
-          matchingFallbacks += Abi.VARIANTS[Abi.LAB]!!.flavor
-        }
         Abi.VARIANTS.forEach { (subAbiIndex, subVariant) ->
           buildConfigBool("${subVariant.flavor.uppercase()}_FLAVOR", abiIndex == subAbiIndex)
         }
@@ -877,21 +869,6 @@ android {
         }
       }
     }
-  }
-}
-
-if (generateBaselineProfile) {
-  apply(plugin = libs.plugins.androidx.baselineprofile.get().pluginId)
-
-  extensions.configure<BaselineProfileConsumerExtension> {
-    mergeIntoMain = true
-    automaticGenerationDuringBuild = false
-    saveInSrc = true
-    warnings.disabledVariants = false
-  }
-
-  afterEvaluate {
-    dependencies.add("latestLabReleaseBaselineProfile", project(":baseline-profile"))
   }
 }
 

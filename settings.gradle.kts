@@ -22,14 +22,7 @@ dependencyResolutionManagement {
   }
 }
 
-val generateBaselineProfile = providers.gradleProperty("generateBaselineProfile").map {
-  it.toBoolean()
-}.orElse(false)
-
 rootProject.name = "tgx"
-if (generateBaselineProfile.get()) {
-  include(":baseline-profile")
-}
 include(
   ":tdlib",
   ":tgcalls",
