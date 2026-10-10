@@ -12,7 +12,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.*
-import tgx.gradle.findExtraFolders
 import tgx.gradle.ndkVersionMajor
 import tgx.gradle.ndkVersionToMinSdk
 import tgx.gradle.requireFile
@@ -140,14 +139,6 @@ open class ModulePlugin : Plugin<Project> {
                   "-DANDROID_STL=${if (ndkVersion.ndkVersionMajor() >= 27) "c++_shared" else "c++_static"}",
                   "-DTGX_FLAVOR=${variant.flavor}"
                 )
-                sourceSets.getByName(variant.flavor) {
-                  val extraFolders = findExtraFolders(variant)
-                  extraFolders.forEach { folderName ->
-                    kotlin.directories += "src/$folderName/kotlin"
-                    java.directories += "src/$folderName/java"
-                    res.directories += "src/$folderName/res"
-                  }
-                }
               }
             }
           }

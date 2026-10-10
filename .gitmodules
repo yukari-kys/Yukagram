@@ -16,11 +16,6 @@
 	path = app/jni/third_party/lz4
 	url = https://github.com/lz4/lz4
 	shallow = true
-[submodule "androidx-media"]
-	path = app/thirdparty/androidx-media/legacy
-	url = https://github.com/androidx/media
-	shallow = true
-	branch = release
 [submodule "flac"]
 	path = app/jni/third_party/flac
 	url = https://github.com/xiph/flac
@@ -51,29 +46,9 @@
 	url = https://github.com/TGX-Android/jni-utils
 	shallow = true
 	branch = main
-[submodule "vkryl/leveldb"]
-	path = vkryl/leveldb
-	url = https://github.com/TGX-Android/leveldb
-	shallow = true
-	branch = main
-[submodule "vkryl/core"]
-	path = vkryl/core
-	url = https://github.com/TGX-Android/X-Core
-	shallow = true
-	branch = main
 [submodule "rlottie"]
 	path = app/jni/third_party/rlottie
 	url = https://github.com/TGX-Android/rlottie
-	shallow = true
-	branch = main
-[submodule "vkryl/td"]
-	path = vkryl/td
-	url = https://github.com/TGX-Android/tdlib-utils
-	shallow = true
-	branch = main
-[submodule "vkryl/android"]
-	path = vkryl/android
-	url = https://github.com/TGX-Android/X-Android
 	shallow = true
 	branch = main
 [submodule "usrsctp"]
@@ -127,9 +102,12 @@
 [submodule "thirdparty/androidx-media/latest"]
 	path = app/thirdparty/androidx-media/latest
 	url = https://github.com/androidx/media
-[submodule "thirdparty/androidx-media/lollipop"]
-	path = app/thirdparty/androidx-media/lollipop
-	url = https://github.com/androidx/media
 [submodule "app/jni/third_party/pixman"]
 	path = app/jni/third_party/pixman
 	url = https://gitlab.freedesktop.org/pixman/pixman.git
+[submodule "vkryl/leveldb/jni/leveldb"]
+	path = vkryl/leveldb/jni/leveldb
+	url = https://github.com/google/leveldb
+[submodule "vkryl/leveldb/jni/jni-utils"]
+	path = vkryl/leveldb/jni/jni-utils
+	url = https://github.com/TGX-Android/jni-utils

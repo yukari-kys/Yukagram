@@ -502,8 +502,6 @@ android {
 
   sourceSets.getByName("main") {
     // TODO: Exclude in FOSS variant
-    kotlin.directories += "src/google/main/java"
-    java.directories += "src/google/main/java"
   }
 
   lint {
@@ -607,16 +605,6 @@ android {
               variant.jetpackMediaFlavor
             }/libraries/${extension}/src/main/java"
           }
-          val extraFolders = findExtraFolders(variant)
-          extraFolders.forEach { folderName ->
-            kotlin.directories += "src/$folderName/kotlin"
-            java.directories += "src/$folderName/java"
-            res.directories += "src/$folderName/res"
-
-            // TODO: Exclude in FOSS variant
-            kotlin.directories += "src/google/$folderName/kotlin"
-            java.directories += "src/google/$folderName/java"
-          }
         }
 
         var extraProguardFileCount = 0
@@ -681,9 +669,9 @@ android {
 
   androidComponents {
     onVariants(selector().withBuildType("release")) { variant ->
-      if (!config.isExperimentalBuild) {
-        variant.lifecycleTasks.registerPreBuild(validateApiTokens)
-      }
+      // if (!config.isExperimentalBuild) {
+      //   variant.lifecycleTasks.registerPreBuild(validateApiTokens)
+      // }
       variant.sources.res?.addGeneratedSourceDirectory(
         fetchLocalizedStrings, FetchLocalizedStringsTask::resOutputDir
       )
@@ -822,13 +810,7 @@ android {
       }
       require(baseVersionCode != null && baseVersionName != null && fileName != null)
 
-      val recaptchaVersion = selectApiFlavor(
-        sdkVariant,
-        libs.google.recaptcha.legacy,
-        libs.google.recaptcha.lollipop,
-        libs.google.recaptcha.marshmallow,
-        libs.google.recaptcha.latest
-      ).get().version!!
+      val recaptchaVersion = libs.google.recaptcha.latest.get().version!!
       require(recaptchaVersion.isNotEmpty() && recaptchaVersion.matches(Regex("^[0-9.]+$"))) {
         "Invalid ReCaptcha version: $recaptchaVersion"
       }
@@ -880,17 +862,6 @@ android {
         ))
       }
 
-      val extraFolders = findExtraFolders(sdkVariant)
-      extraFolders.forEach { folderName ->
-        variant.sources.manifests.addStaticManifestFile(
-          "src/$folderName/AndroidManifest.xml"
-        )
-        // TODO: Exclude in FOSS variant
-        variant.sources.manifests.addStaticManifestFile(
-          "src/google/$folderName/AndroidManifest.xml"
-        )
-      }
-
       if (variant.isMinifyEnabled) {
         val variantName = variant.name.uppercaseFirstChar()
         val copyTask = project.tasks.register<Copy>(
@@ -939,193 +910,71 @@ afterEvaluate {
 }
 
 dependencies {
-  sinceNougatImplementation(libs.androidx.profileinstaller)
-  flavorImplementation(
-    libs.androidx.tracing.legacy,
-    libs.androidx.tracing.lollipop,
-    libs.androidx.tracing.latest
-  )
-  legacyImplementation(libs.androidx.multidex)
+  implementation(libs.androidx.profileinstaller)
+  implementation(libs.androidx.tracing.latest)
   implementation(project(":extension:${config.extension}"))
   // TDLib: https://github.com/tdlib/td/blob/master/CHANGELOG.md
   implementation(project(":tdlib"))
-  sinceLollipopImplementation(project(":tgcalls"))
+  implementation(project(":tgcalls"))
   implementation(project(":vkryl:core"))
   implementation(project(":vkryl:leveldb"))
   implementation(project(":vkryl:android"))
   implementation(project(":vkryl:td"))
   // AndroidX: https://developer.android.com/jetpack/androidx/versions
-  flavorImplementation(
-    libs.androidx.activity.legacy,
-    libs.androidx.activity.lollipop,
-    libs.androidx.activity.latest
-  )
-  flavorImplementation(
-    libs.androidx.gridlayout.legacy,
-    libs.androidx.gridlayout.latest
-  )
-  flavorImplementation(
-    libs.androidx.recyclerview.legacy,
-    libs.androidx.recyclerview.latest
-  )
-  flavorImplementation(
-    libs.androidx.constraintlayout.legacy,
-    libs.androidx.constraintlayout.latest
-  )
-  flavorImplementation(
-    libs.androidx.viewpager.legacy,
-    libs.androidx.viewpager.latest
-  )
-  flavorImplementation(
-    libs.androidx.browser.legacy,
-    libs.androidx.browser.lollipop,
-    libs.androidx.browser.latest
-  )
-  flavorImplementation(
-    libs.androidx.work.runtime.legacy,
-    libs.androidx.work.runtime.lollipop,
-    libs.androidx.work.runtime.marshmallow,
-    libs.androidx.work.runtime.latest
-  )
-  flavorImplementation(
-    libs.androidx.exifinterface.legacy,
-    libs.androidx.exifinterface.latest
-  )
+  implementation(libs.androidx.activity.latest)
+  implementation(libs.androidx.gridlayout.latest)
+  implementation(libs.androidx.recyclerview.latest)
+  implementation(libs.androidx.constraintlayout.latest)
+  implementation(libs.androidx.viewpager.latest)
+  implementation(libs.androidx.browser.latest)
+  implementation(libs.androidx.work.runtime.latest)
+  implementation(libs.androidx.exifinterface.latest)
   implementation(libs.androidx.biometric)
   implementation(libs.androidx.palette)
   implementation(libs.androidx.collection)
   implementation(libs.androidx.interpolator)
   // CameraX: https://developer.android.com/jetpack/androidx/releases/camera
-  flavorImplementation(
-    libs.androidx.camera.camera2.legacy,
-    libs.androidx.camera.camera2.legacy,
-    libs.androidx.camera.camera2.latest
-  )
-  flavorImplementation(
-    libs.androidx.camera.video.legacy,
-    libs.androidx.camera.video.legacy,
-    libs.androidx.camera.video.latest
-  )
-  flavorImplementation(
-    libs.androidx.camera.lifecycle.legacy,
-    libs.androidx.camera.lifecycle.legacy,
-    libs.androidx.camera.lifecycle.latest
-  )
-  flavorImplementation(
-    libs.androidx.camera.view.legacy,
-    libs.androidx.camera.view.legacy,
-    libs.androidx.camera.view.latest
-  )
+  implementation(libs.androidx.camera.camera2.latest)
+  implementation(libs.androidx.camera.video.latest)
+  implementation(libs.androidx.camera.lifecycle.latest)
+  implementation(libs.androidx.camera.view.latest)
   // Google Play Services: https://developers.google.com/android/guides/releases
-  flavorImplementation(
-    libs.google.play.services.base.legacy,
-    libs.google.play.services.base.lollipop,
-    libs.google.play.services.base.marshmallow,
-    libs.google.play.services.base.latest
-  )
-  flavorImplementation(
-    libs.google.play.services.basement.legacy,
-    libs.google.play.services.basement.lollipop,
-    libs.google.play.services.basement.marshmallow,
-    libs.google.play.services.basement.latest
-  )
-  flavorImplementation(
-    libs.google.play.services.maps.legacy,
-    libs.google.play.services.maps.lollipop,
-    libs.google.play.services.maps.latest
-  )
-  flavorImplementation(
-    libs.google.play.services.location.legacy,
-    libs.google.play.services.location.lollipop,
-    libs.google.play.services.location.latest
-  )
-  flavorImplementation(
-    libs.google.play.services.safetynet.legacy,
-    libs.google.play.services.safetynet.latest
-  )
+  implementation(libs.google.play.services.base.latest)
+  implementation(libs.google.play.services.basement.latest)
+  implementation(libs.google.play.services.maps.latest)
+  implementation(libs.google.play.services.location.latest)
+  implementation(libs.google.play.services.safetynet.latest)
   // ML Kit: https://developers.google.com/ml-kit/release-notes
-  flavorImplementation(
-    libs.google.play.services.mlkit.barcode.scanning.legacy,
-    libs.google.play.services.mlkit.barcode.scanning.latest
-  )
-  flavorImplementation(
-    libs.google.mlkit.language.id.legacy,
-    libs.google.mlkit.language.id.latest
-  )
-  // Firebase: https://firebase.google.com/support/release-notes/android
-  flavorImplementation(
-    libs.google.firebase.messaging.legacy,
-    libs.google.firebase.messaging.lollipop,
-    libs.google.firebase.messaging.latest
-  ) {
-    exclude(group = "com.google.firebase", module = "firebase-core")
-    exclude(group = "com.google.firebase", module = "firebase-analytics")
-    exclude(group = "com.google.firebase", module = "firebase-measurement-connector")
-  }
+  implementation(libs.google.play.services.mlkit.barcode.scanning.latest)
+  implementation(libs.google.mlkit.language.id.latest)
   // Play Integrity: https://developer.android.com/google/play/integrity/reference/com/google/android/play/core/release-notes
-  flavorImplementation(
-    libs.google.play.integrity.legacy,
-    libs.google.play.integrity.lollipop,
-    libs.google.play.integrity.latest
-  )
+  implementation(libs.google.play.integrity.latest)
   // ReCaptcha: https://cloud.google.com/recaptcha/docs/release-notes
-  flavorImplementation(
-    libs.google.recaptcha.legacy,
-    libs.google.recaptcha.lollipop,
-    libs.google.recaptcha.marshmallow,
-    libs.google.recaptcha.latest
-  )
+  implementation(libs.google.recaptcha.latest)
   // AndroidX/media: https://github.com/androidx/media/blob/release/RELEASENOTES.md
-  flavorImplementation(
-    libs.androidx.media.common.legacy,
-    libs.androidx.media.common.lollipop,
-    libs.androidx.media.common.latest
-  )
-  flavorImplementation(
-    libs.androidx.media.transformer.legacy,
-    libs.androidx.media.transformer.lollipop,
-    libs.androidx.media.transformer.latest
-  )
-  flavorImplementation(
-    libs.androidx.media.effect.legacy,
-    libs.androidx.media.effect.lollipop,
-    libs.androidx.media.effect.latest
-  )
-  flavorImplementation(
-    libs.androidx.media.exoplayer.legacy,
-    libs.androidx.media.exoplayer.lollipop,
-    libs.androidx.media.exoplayer.latest
-  )
-  flavorImplementation(
-    libs.androidx.media.exoplayer.hls.legacy,
-    libs.androidx.media.exoplayer.hls.lollipop,
-    libs.androidx.media.exoplayer.hls.latest
-  )
-  sinceMarshmallowImplementation(libs.androidx.media.inspector.latest)
+  implementation(libs.androidx.media.common.latest)
+  implementation(libs.androidx.media.transformer.latest)
+  implementation(libs.androidx.media.effect.latest)
+  implementation(libs.androidx.media.exoplayer.latest)
+  implementation(libs.androidx.media.exoplayer.hls.latest)
+  implementation(libs.androidx.media.inspector.latest)
   // Play In-App Updates: https://developer.android.com/reference/com/google/android/play/core/release-notes-in_app_updates
   implementation(libs.google.play.app.update)
   // Play Billing: https://developer.android.com/google/play/billing/release-notes
-  sinceLollipopImplementation(
-    libs.google.play.billing.lollipop,
-    libs.google.play.billing.latest
-  )
+  implementation(libs.google.play.billing.latest)
   // The Checker Framework: https://checkerframework.org/CHANGELOG.md
   compileOnly(libs.annotations.checkerframework)
   // OkHttp: https://github.com/square/okhttp/blob/master/CHANGELOG.md
-  flavorImplementation(
-    libs.okhttp.legacy,
-    libs.okhttp.latest
-  )
+  implementation(libs.okhttp.latest)
   // ShortcutBadger: https://github.com/leolin310148/ShortcutBadger
   implementation(libs.shortcutbadger) {
     artifact { type = "aar" }
   }
   // ReLinker: https://github.com/KeepSafe/ReLinker/blob/master/CHANGELOG.md
-  preMarshmallowImplementation(libs.relinker)
   // Konfetti: https://github.com/DanielMartinus/Konfetti/blob/main/README.md
   implementation(libs.konfetti)
   // Transcoder: https://github.com/natario1/Transcoder/blob/master/docs/_about/changelog.md
-  legacyImplementation(libs.transcoder)
+  implementation(libs.transcoder)
   // https://github.com/mikereedell/sunrisesunsetlib-java
   implementation(libs.sunriseSunsetCalculator)
 

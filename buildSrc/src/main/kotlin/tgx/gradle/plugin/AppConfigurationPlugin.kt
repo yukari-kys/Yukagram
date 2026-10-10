@@ -35,6 +35,9 @@ open class AppConfigurationPlugin : Plugin<Project> {
       parameters.version.set(
         project.isolated.rootProject.projectDirectory.file("version.properties")
       )
+      parameters.app.set(
+        project.isolated.rootProject.projectDirectory.file("app.properties")
+      )
       parameters.properties.set(
         project.isolated.rootProject.projectDirectory.file("local.properties")
       )

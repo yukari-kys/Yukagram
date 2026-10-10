@@ -44,7 +44,6 @@ import com.google.android.play.core.integrity.IntegrityTokenRequest;
 import com.google.android.play.core.integrity.IntegrityTokenResponse;
 import com.google.android.recaptcha.RecaptchaAction;
 import com.google.android.recaptcha.RecaptchaTasksClient;
-import com.google.firebase.FirebaseOptions;
 
 import org.drinkless.tdlib.Client;
 import org.drinkless.tdlib.TdApi;
@@ -9222,8 +9221,7 @@ public class Tdlib implements TdlibProvider, Settings.SettingsChangeListener, Da
     }
     long projectId = 0;
     try {
-      FirebaseOptions options = FirebaseOptions.fromResource(AppContext.get());
-      String projectIdRaw = options != null ? options.getGcmSenderId() : "";
+      String projectIdRaw = "";
       if (!StringUtils.isEmpty(projectIdRaw)) {
         projectId = Long.parseLong(projectIdRaw);
       } else {

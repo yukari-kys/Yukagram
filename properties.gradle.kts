@@ -2,6 +2,7 @@ import java.io.File
 import java.util.*
 
 var localProps: Properties? = null
+var appProps: Properties? = null
 var rootProps: Properties? = null
 
 // CLI properties: gradle.startParameter.projectProperties
@@ -30,17 +31,22 @@ fun resolveGradleProperty(name: String): String? {
         localProps = readProperties("local.properties")
       }
       localProps!![name]?.toString() ?: let {
-        if (rootProps == null) {
-          rootProps = readProperties("gradle.properties")
+        if (appProps == null) {
+          appProps = readProperties("app.properties")
         }
-        rootProps!![name]?.toString()
+        appProps!![name]?.toString() ?: let {
+          if (rootProps == null) {
+            rootProps = readProperties("gradle.properties")
+          }
+          rootProps!![name]?.toString()
+        }
       }
     }
   }
 }
 
 val extension = resolveGradleProperty("tgx.extension") ?: "none"
-if (extension != "none" && extension != "hms") {
+if (extension != "none" && extension != "hms" && extension != "google") {
   error("Unknown extension: ${extension}")
 }
 extra["huawei"] = (extension == "hms")

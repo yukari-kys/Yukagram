@@ -1,0 +1,900 @@
+/*
+ * This file is a part of tdlib-utils
+ * Copyright © 2014 (tgx-android@pm.me)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@file:JvmName("Td")
+@file:JvmMultifileClass
+
+package tgx.td
+
+import android.content.Intent
+import android.os.Bundle
+import org.drinkless.tdlib.TdApi.*
+import kotlin.contracts.ExperimentalContracts
+
+fun Bundle.put (prefix: String, what: SearchMessagesFilter?) {
+  if (what != null) {
+    putInt(prefix + "_constructor", what.constructor)
+  }
+}
+
+fun Bundle.restoreSearchMessagesFilter (prefix: String): SearchMessagesFilter? {
+  val constructor = getInt(prefix + "_constructor")
+  if (constructor != 0) {
+    try {
+      return constructSearchMessagesFilter(constructor)
+    } catch (_: Exception) {  }
+  }
+  return null
+}
+
+fun Bundle.put (prefix: String, what: MessageSender?) {
+  if (what != null) {
+    when (what.constructor) {
+      MessageSenderUser.CONSTRUCTOR -> {
+        require(what is MessageSenderUser)
+        putLong(prefix + "_user_id", what.userId)
+      }
+      MessageSenderChat.CONSTRUCTOR -> {
+        require(what is MessageSenderChat)
+        putLong(prefix + "_chat_id", what.chatId)
+      }
+      else -> {
+        assertMessageSender_439d4c9c()
+        throw unsupported(what)
+      }
+    }
+  }
+}
+
+fun Bundle.restoreMessageSender (prefix: String): MessageSender? {
+  val chatId = getLong(prefix + "_chat_id")
+  val userId = getLong(prefix + "_user_id")
+  return when {
+    chatId != 0L -> MessageSenderChat(chatId)
+    userId != 0L -> MessageSenderUser(userId)
+    else -> {
+      assertMessageSender_439d4c9c()
+      null
+    }
+  }
+}
+
+fun Bundle.put (prefix: String, what: TextEntityType?) {
+  if (what != null) {
+    putInt(prefix + "_constructor", what.constructor)
+    when (what.constructor) {
+      TextEntityTypeMentionName.CONSTRUCTOR -> {
+        require(what is TextEntityTypeMentionName)
+        putLong(prefix + "_user_id", what.userId)
+      }
+      TextEntityTypeCustomEmoji.CONSTRUCTOR -> {
+        require(what is TextEntityTypeCustomEmoji)
+        putLong(prefix + "_custom_emoji_id", what.customEmojiId)
+      }
+      TextEntityTypeTextUrl.CONSTRUCTOR -> {
+        require(what is TextEntityTypeTextUrl)
+        putString(prefix + "_url", what.url)
+      }
+      TextEntityTypeMediaTimestamp.CONSTRUCTOR -> {
+        require(what is TextEntityTypeMediaTimestamp)
+        putInt(prefix + "_media_timestamp", what.mediaTimestamp)
+      }
+      TextEntityTypeDateTime.CONSTRUCTOR -> {
+        require(what is TextEntityTypeDateTime)
+        putInt(prefix + "_unix_time", what.unixTime)
+        put(prefix + "_formatting_type", what.formattingType)
+      }
+      TextEntityTypePreCode.CONSTRUCTOR -> {
+        require(what is TextEntityTypePreCode)
+        putString(prefix + "_language", what.language)
+      }
+      TextEntityTypeMention.CONSTRUCTOR,
+      TextEntityTypeHashtag.CONSTRUCTOR,
+      TextEntityTypeCashtag.CONSTRUCTOR,
+      TextEntityTypeBotCommand.CONSTRUCTOR,
+      TextEntityTypeUrl.CONSTRUCTOR,
+      TextEntityTypeEmailAddress.CONSTRUCTOR,
+      TextEntityTypePhoneNumber.CONSTRUCTOR,
+      TextEntityTypeBankCardNumber.CONSTRUCTOR,
+      TextEntityTypeBold.CONSTRUCTOR,
+      TextEntityTypeItalic.CONSTRUCTOR,
+      TextEntityTypeUnderline.CONSTRUCTOR,
+      TextEntityTypeStrikethrough.CONSTRUCTOR,
+      TextEntityTypeSpoiler.CONSTRUCTOR,
+      TextEntityTypeCode.CONSTRUCTOR,
+      TextEntityTypePre.CONSTRUCTOR,
+      TextEntityTypeBlockQuote.CONSTRUCTOR,
+      TextEntityTypeExpandableBlockQuote.CONSTRUCTOR -> {
+        // Nothing additional to save
+      }
+      else -> {
+        assertTextEntityType_aefd8e69()
+        throw unsupported(what)
+      }
+    }
+  }
+}
+
+fun Bundle.restoreTextEntityType (prefix: String): TextEntityType? {
+  val constructor = getInt(prefix + "_constructor")
+  return when (constructor) {
+    TextEntityTypeMentionName.CONSTRUCTOR -> {
+      val userId = getLong(prefix + "_user_id")
+      if (userId != 0L) {
+        TextEntityTypeMentionName(userId)
+      } else {
+        null
+      }
+    }
+    TextEntityTypeCustomEmoji.CONSTRUCTOR -> {
+      val customEmojiId = getLong(prefix + "_custom_emoji_id")
+      if (customEmojiId != 0L) {
+        TextEntityTypeCustomEmoji(customEmojiId)
+      } else {
+        null
+      }
+    }
+    TextEntityTypeTextUrl.CONSTRUCTOR -> {
+      val url = getString(prefix + "_url")
+      if (!url.isNullOrEmpty()) {
+        TextEntityTypeTextUrl(url)
+      } else {
+        null
+      }
+    }
+    TextEntityTypeMediaTimestamp.CONSTRUCTOR -> {
+      val mediaTimestamp = getInt(prefix + "_media_timestamp", -1)
+      if (mediaTimestamp >= 0) {
+        TextEntityTypeMediaTimestamp(mediaTimestamp)
+      } else {
+        null
+      }
+    }
+    TextEntityTypeDateTime.CONSTRUCTOR -> {
+      val unixTime = getInt(prefix + "_unix_time", -1)
+      val formattingType = restoreDateTimeFormattingType(prefix + "_formatting_type")
+      if (unixTime != -1 || formattingType != null) {
+        TextEntityTypeDateTime(unixTime, formattingType)
+      } else {
+        null
+      }
+    }
+    TextEntityTypePreCode.CONSTRUCTOR -> {
+      val language = getString(prefix + "_language")
+      TextEntityTypePreCode(language)
+    }
+    TextEntityTypeMention.CONSTRUCTOR -> TextEntityTypeMention()
+    TextEntityTypeHashtag.CONSTRUCTOR -> TextEntityTypeHashtag()
+    TextEntityTypeCashtag.CONSTRUCTOR -> TextEntityTypeCashtag()
+    TextEntityTypeBotCommand.CONSTRUCTOR -> TextEntityTypeBotCommand()
+    TextEntityTypeUrl.CONSTRUCTOR -> TextEntityTypeUrl()
+    TextEntityTypeEmailAddress.CONSTRUCTOR -> TextEntityTypeEmailAddress()
+    TextEntityTypePhoneNumber.CONSTRUCTOR -> TextEntityTypePhoneNumber()
+    TextEntityTypeBankCardNumber.CONSTRUCTOR -> TextEntityTypeBankCardNumber()
+    TextEntityTypeBold.CONSTRUCTOR -> TextEntityTypeBold()
+    TextEntityTypeItalic.CONSTRUCTOR -> TextEntityTypeItalic()
+    TextEntityTypeUnderline.CONSTRUCTOR -> TextEntityTypeUnderline()
+    TextEntityTypeStrikethrough.CONSTRUCTOR -> TextEntityTypeStrikethrough()
+    TextEntityTypeSpoiler.CONSTRUCTOR -> TextEntityTypeSpoiler()
+    TextEntityTypeCode.CONSTRUCTOR -> TextEntityTypeCode()
+    TextEntityTypePre.CONSTRUCTOR -> TextEntityTypePre()
+    TextEntityTypeBlockQuote.CONSTRUCTOR -> TextEntityTypeBlockQuote()
+    TextEntityTypeExpandableBlockQuote.CONSTRUCTOR -> TextEntityTypeExpandableBlockQuote()
+    else -> {
+      assertTextEntityType_aefd8e69()
+      null
+    }
+  }
+}
+
+fun Bundle.restoreDateTimePartPrecision (prefix: String): DateTimePartPrecision? {
+  val constructor = getInt(prefix + "_constructor")
+  return when (constructor) {
+    DateTimePartPrecisionNone.CONSTRUCTOR ->
+      DateTimePartPrecisionNone()
+    DateTimePartPrecisionShort.CONSTRUCTOR ->
+      DateTimePartPrecisionShort()
+    DateTimePartPrecisionLong.CONSTRUCTOR ->
+      DateTimePartPrecisionLong()
+    else -> {
+      assertDateTimePartPrecision_126814c6()
+      null
+    }
+  }
+}
+
+fun Bundle.put (prefix: String, what: DateTimePartPrecision) {
+  putInt(prefix + "_constructor", what.constructor)
+}
+
+fun Bundle.restoreDateTimeFormattingType (prefix: String): DateTimeFormattingType? {
+  val constructor = getInt(prefix + "_constructor")
+  return when (constructor) {
+    DateTimeFormattingTypeAbsolute.CONSTRUCTOR -> {
+      val timePrecision = restoreDateTimePartPrecision(prefix + "_timePrecision")
+      val datePrecision = restoreDateTimePartPrecision(prefix + "_datePrecision")
+      if (timePrecision != null && datePrecision != null) {
+        val showDayOfWeek = getBoolean(prefix + "_showDayOfWeek", false)
+        DateTimeFormattingTypeAbsolute(
+          timePrecision,
+          datePrecision,
+          showDayOfWeek
+        )
+      } else {
+        null
+      }
+    }
+    DateTimeFormattingTypeRelative.CONSTRUCTOR ->
+      DateTimeFormattingTypeRelative()
+    else -> {
+      assertDateTimeFormattingType_d84ef731()
+      null
+    }
+  }
+}
+
+fun Bundle.put (prefix: String, what: DateTimeFormattingType?) {
+  if (what != null) {
+    putInt(prefix + "_constructor", what.constructor)
+    when (what.constructor) {
+      DateTimeFormattingTypeAbsolute.CONSTRUCTOR -> {
+        require(what is DateTimeFormattingTypeAbsolute)
+        put(prefix + "_timePrecision", what.timePrecision)
+        put(prefix + "_datePrecision", what.datePrecision)
+        putBoolean(prefix + "_showDayOfWeek", what.showDayOfWeek)
+      }
+      DateTimeFormattingTypeRelative.CONSTRUCTOR ->
+        DateTimeFormattingTypeRelative()
+      else -> {
+        assertDateTimeFormattingType_d84ef731()
+        throw unsupported(what)
+      }
+    }
+  }
+}
+
+fun Bundle.put (prefix: String, what: TextEntity?) {
+  if (what != null) {
+    putInt(prefix + "_offset", what.offset)
+    putInt(prefix + "_length", what.length)
+    put(prefix + "_type", what.type)
+  }
+}
+
+fun Bundle.restoreTextEntity (prefix: String): TextEntity? {
+  val offset = getInt(prefix + "_offset")
+  val length = getInt(prefix + "_length")
+  val type = restoreTextEntityType(prefix + "_type")
+  return if (type != null && containsKey(prefix + "_offset") && containsKey(prefix + "_length")) {
+    TextEntity(offset, length, type)
+  } else {
+    null
+  }
+}
+
+@ExperimentalContracts
+fun Bundle.put (prefix: String, what: ChatFolderName) {
+  put(prefix + "_text", what.text)
+  putBoolean(prefix + "_animateCustomEmoji", what.animateCustomEmoji)
+}
+
+fun Bundle.restoreChatFolderName (prefix: String): ChatFolderName {
+  return ChatFolderName(
+    restoreFormattedText(prefix + "_text") ?: FormattedText("", arrayOf()),
+    getBoolean(prefix + "_animateCustomEmoji", true)
+  )
+}
+
+@ExperimentalContracts
+fun Bundle.put (prefix: String, what: FormattedText?) {
+  if (!what.isEmpty()) {
+    putString(prefix + "_text", what.text)
+    if (!what.entities.isNullOrEmpty()) {
+      putInt(prefix + "_entityCount", what.entities.size)
+      what.entities.forEachIndexed { index, entity ->
+        put(prefix + "_entity_" + index, entity)
+      }
+    }
+  }
+}
+
+fun Bundle.restoreFormattedText (prefix: String): FormattedText? {
+  val text = getString(prefix + "_text")
+  return if (!text.isNullOrEmpty()) {
+    val entityCount = getInt(prefix + "_entityCount")
+    val entities = mutableListOf<TextEntity>()
+    for (index in 0 until entityCount) {
+      val entity = restoreTextEntity(prefix + "_entity_" + index)
+      if (entity != null) {
+        entities.add(entity)
+      }
+    }
+    FormattedText(text, entities.toTypedArray())
+  } else {
+    null
+  }
+}
+
+@ExperimentalContracts
+fun Bundle.put (prefix: String, what: InputTextQuote?) {
+  if (!what.isEmpty()) {
+    put(prefix + "_text", what.text)
+    putInt(prefix + "_position", what.position)
+  }
+}
+
+@ExperimentalContracts
+fun Bundle.restoreInputTextQuote (prefix: String): InputTextQuote? {
+  val text = restoreFormattedText(prefix + "_text")
+  return if (!text.isEmpty()) {
+    val position = getInt(prefix + "_position")
+    InputTextQuote(text, position)
+  } else {
+    null
+  }
+}
+
+fun Bundle.put (prefix: String, what: LinkPreviewOptions?) {
+  if (what != null) {
+    putBoolean(prefix + "_hasOptions", true)
+    putBoolean(prefix + "_isDisabled", what.isDisabled)
+    putString(prefix + "_url", what.url)
+    putBoolean(prefix + "_forceSmallMedia", what.forceSmallMedia)
+    putBoolean(prefix + "_forceLargeMedia", what.forceLargeMedia)
+    putBoolean(prefix + "_showAboveText", what.showAboveText)
+  }
+}
+
+fun Bundle.restoreLinkPreviewOptions (prefix: String): LinkPreviewOptions? {
+  return if (getBoolean(prefix + "_hasOptions")) {
+    LinkPreviewOptions(
+      getBoolean(prefix + "_isDisabled"),
+      getString(prefix + "_url"),
+      getBoolean(prefix + "_forceSmallMedia"),
+      getBoolean(prefix + "_forceLargeMedia"),
+      getBoolean(prefix + "_showAboveText")
+    )
+  } else {
+    null
+  }
+}
+
+@ExperimentalContracts
+fun Bundle.put (prefix: String, what: DraftMessageContent?) {
+  if (what != null) {
+    putInt(prefix + "_constructor", what.constructor)
+    when (what.constructor) {
+      DraftMessageContentText.CONSTRUCTOR -> {
+        require(what is DraftMessageContentText)
+        if (COMPILE_CHECK) {
+          DraftMessageContentText(
+            what.text,
+            what.linkPreviewOptions
+          )
+        }
+        put(prefix + "_text", what.text)
+        put(prefix + "_linkPreviewOptions", what.linkPreviewOptions)
+      }
+      DraftMessageContentInputRichMessage.CONSTRUCTOR -> {
+        require(what is DraftMessageContentInputRichMessage)
+        if (COMPILE_CHECK) {
+          DraftMessageContentInputRichMessage(
+            what.message
+          )
+        }
+        // TODO?
+        // put(prefix + "_message", what.message)
+      }
+      DraftMessageContentRichMessage.CONSTRUCTOR -> {
+        require(what is DraftMessageContentRichMessage)
+        if (COMPILE_CHECK) {
+          DraftMessageContentRichMessage(
+            what.message
+          )
+        }
+        // TODO?
+        // put(prefix + "_message", what.message)
+      }
+      DraftMessageContentVoiceNote.CONSTRUCTOR -> {
+        require(what is DraftMessageContentVoiceNote)
+        if (COMPILE_CHECK) {
+          DraftMessageContentVoiceNote(
+            what.filePath,
+            what.duration,
+            what.waveform,
+            what.selfDestructType
+          )
+        }
+        putString("${prefix}_filePath", what.filePath)
+        putInt("${prefix}_duration", what.duration)
+        putByteArray("${prefix}_waveform", what.waveform)
+        put("${prefix}_selfDestructType", what.selfDestructType)
+      }
+      DraftMessageContentVideoNote.CONSTRUCTOR -> {
+        require(what is DraftMessageContentVideoNote)
+        putString("${prefix}_filePath", what.filePath)
+        putInt("${prefix}_duration", what.duration)
+        putInt("${prefix}_length", what.length)
+        put("${prefix}_selfDestructType", what.selfDestructType)
+      }
+      else -> {
+        assertDraftMessageContent_f690069b()
+        throw unsupported(what)
+      }
+    }
+  }
+}
+
+fun Bundle.put (prefix: String, what: MessageSelfDestructType?) {
+  if (what != null) {
+    putInt(prefix + "_constructor", what.constructor)
+    when (what.constructor) {
+      MessageSelfDestructTypeImmediately.CONSTRUCTOR -> {}
+      MessageSelfDestructTypeTimer.CONSTRUCTOR -> {
+        require(what is MessageSelfDestructTypeTimer)
+        putInt(prefix + "_selfDestructTime", what.selfDestructTime)
+      }
+      else -> {
+        assertMessageSelfDestructType_58882d8c()
+        throw unsupported(what)
+      }
+    }
+  }
+}
+
+fun Bundle.restoreSelfDestructType (prefix: String): MessageSelfDestructType? {
+  val constructor = getInt(prefix + "_constructor")
+  return when (constructor) {
+    MessageSelfDestructTypeImmediately.CONSTRUCTOR -> {
+      MessageSelfDestructTypeImmediately()
+    }
+    MessageSelfDestructTypeTimer.CONSTRUCTOR -> {
+      MessageSelfDestructTypeTimer(
+        getInt(prefix + "_selfDestructTime")
+      )
+    }
+    else -> {
+      assertMessageSelfDestructType_58882d8c()
+      null
+    }
+  }
+}
+
+@ExperimentalContracts
+fun Bundle.restoreDraftMessageContent (prefix: String): DraftMessageContent? {
+  val constructor = getInt(prefix + "_constructor")
+  return when (constructor) {
+    DraftMessageContentText.CONSTRUCTOR -> {
+      val text = restoreFormattedText(prefix + "_text")
+      if (!text.isEmpty()) {
+        DraftMessageContentText(
+          text,
+          restoreLinkPreviewOptions(prefix + "_linkPreviewOptions")
+        )
+      } else {
+        null
+      }
+    }
+    DraftMessageContentInputRichMessage.CONSTRUCTOR,
+    DraftMessageContentRichMessage.CONSTRUCTOR -> {
+      // TODO?
+      null
+      /*val message = restoreRichMessage(prefix + "_message")
+      if (message != null) {
+        DraftMessageContentRichMessage(
+          message
+        )
+      } else {
+        null
+      }*/
+    }
+    DraftMessageContentVoiceNote.CONSTRUCTOR -> {
+      val filePath = getString("${prefix}_filePath")
+      if (!filePath.isNullOrEmpty()) {
+        DraftMessageContentVoiceNote(
+          filePath,
+          getInt("${prefix}_duration"),
+          getByteArray("${prefix}_waveform"),
+          restoreSelfDestructType("${prefix}_selfDestructType")
+        )
+      } else {
+        null
+      }
+    }
+    DraftMessageContentVideoNote.CONSTRUCTOR -> {
+      val filePath = getString("${prefix}_filePath")
+      if (!filePath.isNullOrEmpty()) {
+        DraftMessageContentVideoNote(
+          filePath,
+          getInt("${prefix}_duration"),
+          getInt("${prefix}_length"),
+          restoreSelfDestructType("${prefix}_selfDestructType")
+        )
+      } else {
+        null
+      }
+    }
+    else -> {
+      assertDraftMessageContent_f690069b()
+      null
+    }
+  }
+}
+
+fun Bundle.put (prefix: String, what: SuggestedPostPrice?) {
+  if (what != null) {
+    putInt(prefix + "_constructor", what.constructor)
+    when (what.constructor) {
+      SuggestedPostPriceStar.CONSTRUCTOR -> {
+        require(what is SuggestedPostPriceStar)
+        if (COMPILE_CHECK) {
+          SuggestedPostPriceStar(
+            what.starCount
+          )
+        }
+        putLong(prefix + "_starCount", what.starCount)
+      }
+      SuggestedPostPriceGram.CONSTRUCTOR -> {
+        require(what is SuggestedPostPriceGram)
+        if (COMPILE_CHECK) {
+          SuggestedPostPriceGram(
+            what.gramCentCount
+          )
+        }
+        putLong(prefix + "_gramCentCount", what.gramCentCount)
+      }
+      else -> {
+        assertSuggestedPostPrice_e3fd9668()
+        throw unsupported(what)
+      }
+    }
+  }
+}
+
+fun Bundle.restoreSuggestedPostPrice (prefix: String): SuggestedPostPrice? {
+  val constructor = getInt(prefix + "_constructor")
+  return when (constructor) {
+    SuggestedPostPriceStar.CONSTRUCTOR -> {
+      SuggestedPostPriceStar(
+        getLong(prefix + "_starCount")
+      )
+    }
+    SuggestedPostPriceGram.CONSTRUCTOR -> {
+      SuggestedPostPriceGram(
+        getLong(prefix + "_gramCentCount")
+      )
+    }
+    else -> {
+      assertSuggestedPostPrice_e3fd9668()
+      null
+    }
+  }
+
+}
+
+fun Bundle.put (prefix: String, what: InputSuggestedPostInfo?) {
+  if (what != null) {
+    if (COMPILE_CHECK) {
+      InputSuggestedPostInfo(
+        what.price,
+        what.sendDate
+      )
+    }
+    put(prefix + "_price", what.price)
+    putInt(prefix + "_sendDate", what.sendDate)
+  }
+}
+
+fun Bundle.restoreInputSuggestedPostInfo (prefix: String): InputSuggestedPostInfo? {
+  val price = restoreSuggestedPostPrice(prefix + "_price")
+  val sendDate = getInt(prefix + "_sendDate")
+  return price?.let {
+    InputSuggestedPostInfo(
+      price,
+      sendDate
+    )
+  }
+}
+
+@ExperimentalContracts
+fun Bundle.put (prefix: String, what: InputMessageReplyTo?) {
+  if (what != null) {
+    putInt(prefix + "_constructor", what.constructor)
+    when (what.constructor) {
+      InputMessageReplyToMessage.CONSTRUCTOR -> {
+        require(what is InputMessageReplyToMessage)
+        if (COMPILE_CHECK) {
+          InputMessageReplyToMessage(
+            what.messageId,
+            what.quote,
+            what.checklistTaskId,
+            what.pollOptionId
+          )
+        }
+        putLong(prefix + "_messageId", what.messageId)
+        put(prefix + "_quote", what.quote)
+        putInt(prefix + "_checklistTaskId", what.checklistTaskId)
+        putString(prefix + "_pollOptionId", what.pollOptionId ?: "")
+      }
+      InputMessageReplyToExternalMessage.CONSTRUCTOR -> {
+        require(what is InputMessageReplyToExternalMessage)
+        if (COMPILE_CHECK) {
+          InputMessageReplyToExternalMessage(
+            what.chatId,
+            what.messageId,
+            what.quote,
+            what.checklistTaskId,
+            what.pollOptionId
+          )
+        }
+        putLong(prefix + "_chatId", what.chatId)
+        putLong(prefix + "_messageId", what.messageId)
+        put(prefix + "_quote", what.quote)
+        putInt(prefix + "_checklistTaskId", what.checklistTaskId)
+        putString(prefix + "_pollOptionId", what.pollOptionId ?: "")
+      }
+      InputMessageReplyToStory.CONSTRUCTOR -> {
+        require(what is InputMessageReplyToStory)
+        if (COMPILE_CHECK) {
+          InputMessageReplyToStory(
+            what.storyPosterChatId,
+            what.storyId
+          )
+        }
+        putLong(prefix + "_chatId", what.storyPosterChatId)
+        putInt(prefix + "_storyId", what.storyId)
+      }
+      InputMessageReplyToEphemeralMessage.CONSTRUCTOR -> {
+        require(what is InputMessageReplyToEphemeralMessage)
+        if (COMPILE_CHECK) {
+          InputMessageReplyToEphemeralMessage(
+            what.ephemeralMessageId
+          )
+        }
+        putInt("${prefix}_ephemeralMessageId", what.ephemeralMessageId)
+      }
+      else -> {
+        assertInputMessageReplyTo_a271ad89()
+        throw unsupported(what)
+      }
+    }
+  }
+}
+
+@ExperimentalContracts
+fun Bundle.restoreInputMessageReplyTo (prefix: String): InputMessageReplyTo? {
+  val constructor = getInt(prefix + "_constructor")
+  return when (constructor) {
+    InputMessageReplyToMessage.CONSTRUCTOR -> {
+      val messageId = getLong(prefix + "_messageId")
+      val quote = restoreInputTextQuote(prefix + "_quote")
+      val checklistTaskId = getInt(prefix + "_checklistTaskId")
+      val pollOptionId = getString(prefix + "_pollOptionId")
+      if (messageId != 0L) {
+        InputMessageReplyToMessage(messageId, quote, checklistTaskId, pollOptionId)
+      } else {
+        null
+      }
+    }
+    InputMessageReplyToExternalMessage.CONSTRUCTOR -> {
+      val chatId = getLong(prefix + "_chatId")
+      val messageId = getLong(prefix + "_messageId")
+      val quote = restoreInputTextQuote(prefix + "_quote")
+      val checklistTaskId = getInt(prefix + "_checklistTaskId")
+      val pollOptionId = getString(prefix + "_pollOptionId")
+      if (messageId != 0L) {
+        InputMessageReplyToExternalMessage(chatId, messageId, quote, checklistTaskId, pollOptionId)
+      } else {
+        null
+      }
+    }
+    InputMessageReplyToStory.CONSTRUCTOR -> {
+      val storySenderChatId = getLong(prefix + "_chatId")
+      val storyId = getInt(prefix + "_storyId")
+      if (storySenderChatId != 0L && storyId != 0) {
+        InputMessageReplyToStory(storySenderChatId, storyId)
+      } else {
+        null
+      }
+    }
+    InputMessageReplyToEphemeralMessage.CONSTRUCTOR -> {
+      val ephemeralMessageId = getInt("${prefix}_ephemeralMessageId")
+      if (ephemeralMessageId != 0) {
+        InputMessageReplyToEphemeralMessage(ephemeralMessageId)
+      } else {
+        null
+      }
+    }
+    else -> {
+      assertInputMessageReplyTo_a271ad89()
+      null
+    }
+  }
+}
+
+@ExperimentalContracts
+fun Bundle.put (prefix: String, what: DraftMessage?) {
+  if (what != null) {
+    if (COMPILE_CHECK) {
+      DraftMessage(
+        what.replyTo,
+        what.date,
+        what.content,
+        what.effectId,
+        what.suggestedPostInfo
+      )
+    }
+    put(prefix + "_replyTo", what.replyTo)
+    putInt(prefix + "_date", what.date)
+    put(prefix + "_content", what.content)
+    putLong(prefix + "_effect", what.effectId)
+    put(prefix + "_suggestedPostInfo", what.suggestedPostInfo)
+  }
+}
+
+@ExperimentalContracts
+fun Bundle.restoreDraftMessage (prefix: String): DraftMessage? {
+  val replyTo = restoreInputMessageReplyTo(prefix + "_replyTo")
+  val date = getInt(prefix + "_date")
+  val content = restoreDraftMessageContent(prefix + "_content")
+  val effectId = getLong(prefix + "_effect")
+  val suggestedPostInfo = restoreInputSuggestedPostInfo(prefix + "_suggestedPostInfo")
+  return if (content != null || replyTo != null) {
+    DraftMessage(replyTo, date, content, effectId, suggestedPostInfo)
+  } else {
+    null
+  }
+}
+
+@ExperimentalContracts
+fun Bundle.put (prefix: String, what: MessageReplyInfo?) {
+  if (what != null) {
+    if (COMPILE_CHECK) {
+      MessageReplyInfo(
+        what.replyCount,
+        what.recentReplierIds,
+        what.lastReadInboxMessageId,
+        what.lastReadOutboxMessageId,
+        what.lastMessageId
+      )
+    }
+    putInt(prefix + "_replyCount", what.replyCount)
+    putLong(prefix + "_lastMessageId", what.lastMessageId)
+    putLong(prefix + "_lastReadInboxMessageId", what.lastReadInboxMessageId)
+    putLong(prefix + "_lastReadOutboxMessageId", what.lastReadOutboxMessageId)
+    if (!what.recentReplierIds.isNullOrEmpty()) {
+      putInt(prefix + "_recentReplierIdsLength", what.recentReplierIds.size)
+      what.recentReplierIds.forEachIndexed { index, recentReplierId ->
+        put(prefix + "_recentReplierId_" + index, recentReplierId)
+      }
+    }
+  }
+}
+
+@ExperimentalContracts
+fun Bundle.restoreMessageReplyInfo (prefix: String): MessageReplyInfo? {
+  val replyCount = getInt(prefix + "_replyCount", -1)
+  if (replyCount == -1) {
+    return null
+  }
+  val lastMessageId = getLong(prefix + "_lastMessageId")
+  val lastReadInboxMessageId = getLong(prefix + "_lastReadInboxMessageId")
+  val lastReadOutboxMessageId = getLong(prefix + "_lastReadOutboxMessageId")
+  val recentReplierIdsLength = getInt(prefix + "_recentReplierIdsLength")
+  val recentReplierIds = mutableListOf<MessageSender>()
+  for (index in 0 until recentReplierIdsLength) {
+    val recentReplierId = restoreMessageSender(prefix + "_recentReplierId_" + index)
+    if (recentReplierId != null) {
+      recentReplierIds.add(recentReplierId)
+    }
+  }
+  return MessageReplyInfo(
+    replyCount,
+    recentReplierIds.toTypedArray(),
+    lastReadInboxMessageId,
+    lastReadOutboxMessageId,
+    lastMessageId
+  )
+}
+
+fun Intent.put (prefix: String, what: MessageTopic?) {
+  if (what != null) {
+    val bundle = Bundle()
+    bundle.put(prefix, what)
+    putExtras(bundle)
+  }
+}
+
+fun Bundle.put (prefix: String, what: MessageTopic?) {
+  if (what != null) {
+    putInt(prefix + "_constructor", what.constructor)
+    when (what.constructor) {
+      MessageTopicThread.CONSTRUCTOR -> {
+        require(what is MessageTopicThread)
+        if (COMPILE_CHECK) {
+          MessageTopicThread(
+            what.messageThreadId
+          )
+        }
+        putLong(prefix + "_messageThreadId", what.messageThreadId)
+      }
+      MessageTopicForum.CONSTRUCTOR -> {
+        require(what is MessageTopicForum)
+        if (COMPILE_CHECK) {
+          MessageTopicForum(
+            what.forumTopicId
+          )
+        }
+        putInt(prefix + "_forumTopicId", what.forumTopicId)
+      }
+      MessageTopicDirectMessages.CONSTRUCTOR -> {
+        require(what is MessageTopicDirectMessages)
+        if (COMPILE_CHECK) {
+          MessageTopicDirectMessages(
+            what.directMessagesChatTopicId
+          )
+        }
+        putLong(prefix + "_directMessagesChatTopicId", what.directMessagesChatTopicId)
+      }
+      MessageTopicSavedMessages.CONSTRUCTOR -> {
+        require(what is MessageTopicSavedMessages)
+        if (COMPILE_CHECK) {
+          MessageTopicSavedMessages(
+            what.savedMessagesTopicId
+          )
+        }
+        putLong(prefix + "_savedMessagesTopicId", what.savedMessagesTopicId)
+      }
+      else -> {
+        assertMessageTopic_98b4a9a3()
+      }
+    }
+  }
+}
+
+fun Bundle.restoreMessageTopic (prefix: String): MessageTopic? {
+  val constructor = getInt(prefix + "_constructor", 0)
+  if (constructor != 0) {
+    return when (constructor) {
+      MessageTopicThread.CONSTRUCTOR -> {
+        MessageTopicThread(
+          getLong(prefix + "_messageThreadId", 0)
+        )
+      }
+      MessageTopicForum.CONSTRUCTOR -> {
+        MessageTopicForum(
+          getInt(prefix + "_forumTopicId", 0)
+        )
+      }
+      MessageTopicDirectMessages.CONSTRUCTOR -> {
+        MessageTopicDirectMessages(
+          getLong(prefix + "_directMessagesChatTopicId", 0)
+        )
+      }
+      MessageTopicSavedMessages.CONSTRUCTOR -> {
+        MessageTopicSavedMessages(
+          getLong(prefix + "_savedMessagesTopicId", 0)
+        )
+      }
+      else -> {
+        assertMessageTopic_98b4a9a3()
+        null
+      }
+    }
+  }
+  return null
+}
