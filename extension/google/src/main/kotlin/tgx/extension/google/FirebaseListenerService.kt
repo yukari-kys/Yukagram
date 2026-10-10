@@ -19,10 +19,10 @@ import tgx.bridge.PushManagerBridge.onNewToken
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import org.thunderdog.challegram.TDLib
-import org.thunderdog.challegram.telegram.TdlibAccount
-import org.thunderdog.challegram.telegram.TdlibManager
-import org.thunderdog.challegram.unsorted.AppContext
+// import org.thunderdog.challegram.TDLib
+// import org.thunderdog.challegram.telegram.TdlibAccount
+// import org.thunderdog.challegram.telegram.TdlibManager
+// import org.thunderdog.challegram.unsorted.AppContext
 import tgx.bridge.PushManagerBridge
 
 @Suppress("MissingFirebaseInstanceTokenRefresh")
@@ -36,9 +36,9 @@ abstract class DefaultFirebaseMessagingService : FirebaseMessagingService() {
   }
 
   override fun onDeletedMessages() {
-    AppContext.init(applicationContext)
-    TDLib.Tag.notifications("onDeletedMessages: performing sync for all accounts")
-    TdlibManager.makeSync(applicationContext, TdlibAccount.NO_ID, TdlibManager.SYNC_CAUSE_DELETED_MESSAGES, 0, !TdlibManager.inUiThread(), 0)
+    // AppContext.init(applicationContext)
+    // TDLib.Tag.notifications("onDeletedMessages: performing sync for all accounts")
+    // TdlibManager.makeSync(applicationContext, TdlibAccount.NO_ID, TdlibManager.SYNC_CAUSE_DELETED_MESSAGES, 0, !TdlibManager.inUiThread(), 0)
   }
 
   companion object {

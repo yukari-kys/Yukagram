@@ -48,7 +48,7 @@ abstract class AppConfigurationSource : ValueSource<ApplicationConfig, AppConfig
       keystoreFilePath == null ||
         app.getProperty("app.experimental", "false") == "true"
     val applicationExtension = getOrDefault(properties, "tgx.extension", defaults).also {
-      require(it == "none" || it == "hms")
+      require(it == "none" || it == "hms" || it == "google")
     }
 
     val sampleApiId = defaults.getIntOrThrow("telegram.api_id")

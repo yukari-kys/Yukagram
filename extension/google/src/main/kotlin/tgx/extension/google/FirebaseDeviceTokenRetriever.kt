@@ -4,21 +4,26 @@ import android.content.Context
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
-import org.drinkless.tdlib.TdApi.DeviceTokenFirebaseCloudMessaging
-import org.thunderdog.challegram.service.DefaultFirebaseTokenRetriever
-import tgx.bridge.PushManagerBridge
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.ConnectionResult
 import tgx.bridge.TokenRetrieverListener
-import android.content.Context
 import com.google.firebase.FirebaseApp
-import me.vkryl.core.isEmpty
-import org.thunderdog.challegram.U
 import tgx.bridge.DeviceTokenRetriever
 import tgx.bridge.PushManagerBridge
+import org.drinkless.tdlib.TdApi.DeviceTokenFirebaseCloudMessaging
 import java.util.regex.Pattern
 
 abstract class DefaultFirebaseTokenRetriever : DeviceTokenRetriever("firebase") {
-  override fun isAvailable(context: Context): Boolean =
-    U.isGooglePlayServicesAvailable(context)
+  override fun isAvailable(context: Context): Boolean {
+    try {
+      if (context != null) {
+        return GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
+      }
+    } catch (e: Throwable) {
+    }
+    return false
+  }
+
 
   override fun performInitialization(context: Context): Boolean {
     try {
@@ -38,7 +43,7 @@ abstract class DefaultFirebaseTokenRetriever : DeviceTokenRetriever("firebase") 
   companion object {
     fun extractFirebaseErrorName(e: Throwable): String {
       val message: String = e.message!!
-      if (!isEmpty(message)) {
+      if (!message.isNullOrEmpty()) {
         val matcher = Pattern.compile("(?<=: )[A-Z_]+$").matcher(message)
         if (matcher.find()) {
           return matcher.group()

@@ -13,6 +13,9 @@ dependencies {
     exclude(group = "com.google.firebase", module = "firebase-analytics")
     exclude(group = "com.google.firebase", module = "firebase-measurement-connector")
   }
+  implementation(
+    libs.google.play.services.base.latest
+  )
   implementation(project(":tdlib"))
   api(project(":extension:bridge"))
 }
