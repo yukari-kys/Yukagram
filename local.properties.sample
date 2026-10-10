@@ -15,8 +15,8 @@ keystore.file=
 
 ## Obtain credentials to access Telegram API:
 # https://core.telegram.org/api/obtaining_api_id
-telegram.api_id=94575
-telegram.api_hash=a3406de8d171bb422bb6ddf3bbd800e2
+telegram.api_id=6
+telegram.api_hash=eb06d4abfb49dc3eeb1aeb98ae0f581e
 
 ## Extension module to apply. One of: none, hms, google
 tgx.extension=none
