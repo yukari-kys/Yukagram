@@ -3685,6 +3685,23 @@ public class Lang {
     TdApi.LanguagePackStringValueOrdinary string = queryTdlibStringValue(key, language.id);
     if (string == null && !StringUtils.isEmpty(language.baseLanguagePackId))
       string = queryTdlibStringValue(key, language.baseLanguagePackId);
+    if (string != null)
+      string.value = string.value.replace("Telegram X", getAndroidString(R.string.AppName));
+
+/*
+
+            god bless this code
+
+                (\  __  /)
+                ( \(__)/ )
+                 ( /<>\ )
+                  (\/\/)
+                   /  \
+                  (    )
+                   ~~~~
+
+*/
+
     if (cacheKey != null) {
       putCachedString(cacheKey, string);
     }
