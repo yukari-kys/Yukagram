@@ -48,7 +48,7 @@
 	branch = main
 [submodule "rlottie"]
 	path = app/jni/third_party/rlottie
-	url = https://github.com/TGX-Android/rlottie
+	url = https://github.com/yukari-sys/rlottie
 	shallow = true
 	branch = main
 [submodule "usrsctp"]
