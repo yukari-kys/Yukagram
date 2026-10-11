@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="YukagramDescription">holy crap</string>
+  <string name="yu_YukagramSettings">Yukagram</string>
+  <string name="yu_YukagramSettingsDescription">holy crap</string>
+  <string name="yu_NothingHereYet">Nothing to see here yet :#</string>
 </resources>

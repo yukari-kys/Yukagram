@@ -84,6 +84,8 @@ import org.thunderdog.challegram.util.text.Text;
 import org.thunderdog.challegram.util.text.TextColorSets;
 import org.thunderdog.challegram.util.text.TextWrapper;
 
+import com.github.yukagram.ui.SettingsYukagramController;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
@@ -485,7 +487,9 @@ public class SettingsController extends ViewController<Void> implements
           view.setData(buildInfoShort);
         } else if (itemId == R.id.btn_tdlib) {
           view.setData(TdlibUi.getTdlibVersionSignature());
-        } else if (itemId == R.id.btn_sourceCodeChanges) {
+        } else if (itemId == R.id.btn_yukagramSettings) {
+          view.setData(R.string.yu_YukagramSettingsDescription);
+        }  else if (itemId == R.id.btn_sourceCodeChanges) {
           String previousVersionName = previousBuildInfo.getVersionName();
           int index = previousVersionName.indexOf('-');
           if (index != -1) {
@@ -626,6 +630,10 @@ public class SettingsController extends ViewController<Void> implements
     if (addedActionItems > 0) {
       items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
     }
+
+    items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+    items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_yukagramSettings, R.drawable.baseline_favorite_24, R.string.yu_YukagramSettings));
+    items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
 
     items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
     items.add(new ListItem(ListItem.TYPE_VALUED_SETTING_COMPACT, R.id.btn_devices, R.drawable.baseline_devices_other_24, R.string.Devices));
@@ -1160,6 +1168,8 @@ public class SettingsController extends ViewController<Void> implements
       navigateTo(new SettingsNotificationController(context, tdlib));
     } else if (viewId == R.id.btn_devices) {
       navigateTo(new SettingsSessionsController(context, tdlib));
+    } else if (viewId == R.id.btn_yukagramSettings) {
+      navigateTo(new SettingsYukagramController(context, tdlib));
     } else if (viewId == R.id.btn_checkUpdates) {
       openInstallerPage(((AppInstallationUtil.DownloadUrl) ((ListItem) v.getTag()).getData()));
     } else if (viewId == R.id.btn_subscribeToBeta) {

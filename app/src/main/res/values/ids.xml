@@ -230,6 +230,7 @@
   <item type="id" name="controller_password" />
   <item type="id" name="controller_passwordRecovery" />
 
+  <item type="id" name="controller_yukagramSettings" />
   <item type="id" name="controller_chatSettings" />
   <item type="id" name="controller_privacySettings" />
   <item type="id" name="controller_sessions" />
@@ -496,6 +497,7 @@
   <item type="id" name="btn_openDirectMessages" />
   <item type="id" name="btn_restartTdlib" />
   <item type="id" name="btn_chatSettings" />
+  <item type="id" name="btn_yukagramSettings" />
   <item type="id" name="btn_devices" />
   <item type="id" name="btn_notificationSettings" />
   <item type="id" name="btn_privacySettings" />
