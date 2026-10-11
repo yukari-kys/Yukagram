@@ -107,7 +107,7 @@
 	path = vkryl/leveldb/jni/jni-utils
 	url = https://github.com/TGX-Android/jni-utils
 [submodule "td"]
-	path = td
+	path = tdlib
 	url = https://github.com/tdlib/td
 [submodule "libressl"]
 	path = libressl
