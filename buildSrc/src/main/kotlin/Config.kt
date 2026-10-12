@@ -196,7 +196,7 @@ data class SdkVariant(
   val isLegacy: Boolean = false
 
   val jetpackMediaFlavor: String =
-    flavor.takeIf { !isMarshmallow } ?: "latest"
+    flavor.takeIf { isLegacy || isLollipop } ?: "latest"
 
   val usesLegacyNdk: Boolean =
     isLegacy
@@ -211,7 +211,7 @@ object Sdk {
   val VARIANTS = mapOf(
     Pair(LATEST, SdkVariant(
       flavor = "latest",
-      minSdk = 24,
+      minSdk = 33,
       displayName = null
     ))
   )

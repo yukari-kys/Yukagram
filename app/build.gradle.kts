@@ -129,8 +129,8 @@ val generateExceptions = tasks.register<GenerateExceptionsTask>("updateException
   applicationVersion.set(
     config.applicationVersion
   )
-  javaOutputDir.set(layout.buildDirectory.dir(
-    "generated/tgx/exceptions/java"
+  kotlinOutputDir.set(layout.buildDirectory.dir(
+    "generated/tgx/exceptions/kotlin"
   ))
 }
 val validateApiTokens = tasks.register<ValidateApiTokensTask>("validateApiTokens") {
@@ -745,11 +745,11 @@ android {
         addGeneratedSourceDirectory(
           generateThemes, GenerateThemesTask::javaOutputDir
         )
-        addGeneratedSourceDirectory(
-          generateExceptions, GenerateExceptionsTask::javaOutputDir
-        )
       }
       variant.sources.kotlin?.apply {
+        addGeneratedSourceDirectory(
+          generateExceptions, GenerateExceptionsTask::kotlinOutputDir
+        )
         addGeneratedSourceDirectory(
           generateThemes, GenerateThemesTask::kotlinOutputDir
         )

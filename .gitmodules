@@ -103,9 +103,13 @@
 [submodule "vkryl/leveldb/jni/leveldb"]
 	path = leveldb/jni/leveldb
 	url = https://github.com/google/leveldb
+	shallow = true
+	branch = main
 [submodule "vkryl/leveldb/jni/jni-utils"]
 	path = leveldb/jni/jni-utils
 	url = https://github.com/TGX-Android/jni-utils
+	shallow = true
+	branch = main
 [submodule "tdlib/bin"]
 	path = tdlib/bin
 	url = https://github.com/yukari-sys/tdlib
