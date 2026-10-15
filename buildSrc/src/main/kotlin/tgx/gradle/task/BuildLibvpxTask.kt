@@ -239,6 +239,18 @@ abstract class BuildLibvpxTask : BuildNativeLibraryTask() {
       c.append(newSourceContent)
     }
 
+    val makeParams = mutableListOf<String>()
+    if (isWindowsHost() && abi == "armeabi-v7a") {
+      val converter = requireFile(input.resolve("build/make/ads2gas.pl"))
+      val script = build.resolve("ads2gas.sh")
+      // Keep shell escapes out of the Windows command line.
+      writeToFile(script) { sh ->
+        sh.append("set -o pipefail\n")
+        sh.append("tr -d '\\r' | perl \"${converter.toPosixPath()}\"\n")
+      }
+      makeParams += "ASM_CONVERSION=bash ${script.toPosixPath()}"
+    }
+
     runCommands(
       TAG,
       env,
@@ -248,6 +260,7 @@ abstract class BuildLibvpxTask : BuildNativeLibraryTask() {
         "make" to arrayOf(
           resolveBinary("make", msys2Dir),
           "-j${Runtime.getRuntime().availableProcessors()}",
+          *makeParams.toTypedArray(),
           "install"
         )
       )
