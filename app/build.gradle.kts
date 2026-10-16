@@ -53,6 +53,17 @@ val validateGitSetupTask = tasks.register<ValidateGitSetupTask>("validateGitSetu
   )
 }
 
+val generateTdlibFunctions = tasks.register<GenerateTdlibFunctionsTask>("generateTdlibFunctions") {
+  group = "Setup"
+  description = "Generates TDLib utility functions based on current TdApi.java"
+  tdApi.set(layout.projectDirectory.file(
+    "../tdlib/src/main/java/org/drinkless/tdlib/TdApi.java"
+  ))
+  kotlinOutputDir.set(layout.projectDirectory.dir(
+    "src/generated/kotlin"
+  ))
+}
+
 val generateThemes = tasks.register<GenerateThemesTask>("generateThemes") {
   group = "Setup"
   description = "Generates fresh ids, theme resources and utility methods based on current theme files"
@@ -869,6 +880,12 @@ android {
         }
       }
     }
+    
+    onVariants { variant ->
+      variant.sources.kotlin?.addGeneratedSourceDirectory(
+        generateTdlibFunctions, GenerateTdlibFunctionsTask::kotlinOutputDir
+      )
+    }
   }
 }
 
@@ -895,6 +912,7 @@ dependencies {
   implementation(project(":tgcalls"))
   implementation(project(":leveldb"))
   // AndroidX: https://developer.android.com/jetpack/androidx/versions
+  implementation(libs.androidx.core.ktx.latest)
   implementation(libs.androidx.activity.latest)
   implementation(libs.androidx.gridlayout.latest)
   implementation(libs.androidx.recyclerview.latest)
