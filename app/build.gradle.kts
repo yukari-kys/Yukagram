@@ -378,9 +378,9 @@ android {
 
     var tdlibVersion = ""
     val tdlibCommit = providers.of(GitInformationSource::class) {
-      parameters.module = layout.projectDirectory.dir("../td")
+      parameters.module = layout.projectDirectory.dir("../tdlib/td")
     }.get().commitHashShort
-    val tdlibVersionFile = File(project.rootDir.absoluteFile, "td/CMakeLists.txt")
+    val tdlibVersionFile = File(project.rootDir.absoluteFile, "tdlib/td/CMakeLists.txt")
     tdlibVersionFile.bufferedReader().use { reader ->
       val regex = Regex("^project\\(TDLib VERSION (\\d+\\.\\d+\\.\\d+) LANGUAGES CXX C\\)$")
       while (true) {
@@ -433,7 +433,7 @@ android {
     }}")
 
     val libreSslGit = providers.of(GitInformationSource::class) {
-      parameters.module = layout.projectDirectory.dir("../libressl")
+      parameters.module = layout.projectDirectory.dir("../tdlib/libressl")
     }.get()
     buildConfigString("LIBRESSL_COMMIT", libreSslGit.commitHashShort)
     buildConfigString("LIBRESSL_COMMIT_URL", libreSslGit.commitUrl)
@@ -809,7 +809,7 @@ android {
         ))
 
         var libreSslVersion = ""
-        val libreSslVersionFile = requireFile(project.isolated.rootProject.projectDirectory.file("libressl/patches/opensslv.h").asFile)
+        val libreSslVersionFile = requireFile(project.isolated.rootProject.projectDirectory.file("tdlib/libressl/include/openssl/opensslv.h").asFile)
         libreSslVersionFile.bufferedReader().use { reader ->
           val regex = Regex("^#\\s*define\\s+LIBRESSL_VERSION_TEXT\\s+\"LibreSSL ([^\"]+)\"$")
           while (true) {

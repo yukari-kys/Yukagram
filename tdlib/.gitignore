@@ -1,0 +1,8 @@
+.DS_Store
+/build
+libc++_shared.so
+rebuild.log
+src/
+.cxx/
+libressl/.autogen
+libressl/.autogen.lock
