@@ -893,10 +893,7 @@ dependencies {
   // TDLib: https://github.com/tdlib/td/blob/master/CHANGELOG.md
   implementation(project(":tdlib"))
   implementation(project(":tgcalls"))
-  implementation(project(":vkryl:core"))
-  implementation(project(":vkryl:leveldb"))
-  implementation(project(":vkryl:android"))
-  implementation(project(":vkryl:td"))
+  implementation(project(":leveldb"))
   // AndroidX: https://developer.android.com/jetpack/androidx/versions
   implementation(libs.androidx.activity.latest)
   implementation(libs.androidx.gridlayout.latest)

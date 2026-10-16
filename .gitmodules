@@ -106,8 +106,8 @@
 	path = app/jni/third_party/pixman
 	url = https://gitlab.freedesktop.org/pixman/pixman.git
 [submodule "vkryl/leveldb/jni/leveldb"]
-	path = vkryl/leveldb/jni/leveldb
+	path = leveldb/jni/leveldb
 	url = https://github.com/google/leveldb
 [submodule "vkryl/leveldb/jni/jni-utils"]
-	path = vkryl/leveldb/jni/jni-utils
+	path = leveldb/jni/jni-utils
 	url = https://github.com/TGX-Android/jni-utils

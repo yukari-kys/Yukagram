@@ -26,11 +26,7 @@ rootProject.name = "tgx"
 include(
   ":tdlib",
   ":tgcalls",
-
-  ":vkryl:td",
-  ":vkryl:android",
-  ":vkryl:leveldb",
-  ":vkryl:core",
+  ":leveldb",
 
   ":extension:bridge",
   ":extension:${extra["extension"]}",
