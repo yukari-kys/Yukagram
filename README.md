@@ -7,6 +7,7 @@ Telegram X fork
 Todo list:
 
 - [x] Fix polystar sticker crash
+- [ ] Prebuild tdlib with github workflow
 - [ ] Firebase push notifications
 - [ ] Yukagram settings
 - [ ] Interface changes
