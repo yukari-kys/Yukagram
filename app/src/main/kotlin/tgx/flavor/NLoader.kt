@@ -18,8 +18,8 @@ fun loadLibraries() {
   if (BuildConfig.SHARED_STL) {
     loadLibrary("c++_shared")
   }
-  loadLibrary("cryptox")
-  loadLibrary("sslx")
+  loadLibrary("crypto")
+  loadLibrary("ssl")
   loadLibrary("tdjni")
   loadLibrary("leveldbjni")
   if (BuildConfig.CALLS_AVAILABLE) {
