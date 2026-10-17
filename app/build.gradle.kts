@@ -40,16 +40,12 @@ val validateGitSetupTask = tasks.register<ValidateGitSetupTask>("validateGitSetu
   })
   lfsFiles.from(
     layout.projectDirectory.dir(
-      "../tdlib/src/main/libs"
+      "../tdlib/bin"
     ).asFileTree.matching {
-      include("*/*/*/*.so")
+      include("*/tdlib/libtdjni.so")
+      include("*/libressl/lib/libcrypto.so")
+      include("*/libressl/lib/libssl.so")
     },
-    layout.projectDirectory.dir(
-      "../tdlib/openssl"
-    ).asFileTree.matching {
-      include("*/*/*/lib/libcryptox.so")
-      include("*/*/*/lib/libsslx.so")
-    }
   )
 }
 
@@ -400,8 +396,11 @@ android {
 
     // Library versions in BuildConfig.java
 
+/*
     var tdlibVersion = ""
-    val tdlibCommit = requireFile(project.isolated.rootProject.projectDirectory.file("tdlib/version.txt").asFile).bufferedReader().readLine().take(7)
+    val tdlibGit = providers.of(GitInformationSource::class) {
+      parameters.module = layout.projectDirectory.dir("../tdlib/source/td")
+    }.get()
     val tdlibVersionFile = requireFile(project.isolated.rootProject.projectDirectory.file("tdlib/source/td/CMakeLists.txt").asFile)
     tdlibVersionFile.bufferedReader().use { reader ->
       val regex = Regex("^project\\(TDLib VERSION (\\d+\\.\\d+\\.\\d+) LANGUAGES CXX C\\)$")
@@ -409,7 +408,7 @@ android {
         val line = reader.readLine() ?: break
         val result = regex.find(line)
         if (result != null) {
-          tdlibVersion = "${result.groupValues[1]}-${tdlibCommit}"
+          tdlibVersion = "${result.groupValues[1]}-${tdlibGit.commitHashShort}"
           break
         }
       }
@@ -419,7 +418,7 @@ android {
     }
 
     buildConfigString("TDLIB_VERSION", tdlibVersion)
-
+*/
     val tgxGitVersionProvider = providers.of(GitInformationSource::class) {
       parameters.module = layout.projectDirectory
     }
@@ -455,13 +454,13 @@ android {
     }}")
 
     // OpenSSL version
-
-    val openSslGit = providers.of(GitInformationSource::class) {
-      parameters.module = layout.projectDirectory.dir("../tdlib/source/openssl")
+/*
+    val libreSslGit = providers.of(GitInformationSource::class) {
+      parameters.module = layout.projectDirectory.dir("../tdlib/source/libressl")
     }.get()
-    buildConfigString("OPENSSL_COMMIT", openSslGit.commitHashShort)
-    buildConfigString("OPENSSL_COMMIT_URL", openSslGit.commitUrl)
-
+    buildConfigString("LIBRESSL_COMMIT", libreSslGit.commitHashShort)
+    buildConfigString("LIBRESSL_COMMIT_URL", libreSslGit.commitUrl)
+*/
     // WebRTC version
 
     val webrtcGit = providers.of(GitInformationSource::class) {
@@ -831,7 +830,7 @@ android {
         put("ORIGINAL_VERSION_NAME", BuildConfigField(
           "String", "\"$baseVersionName.$baseVersionCode\"", null
         ))
-
+/*
         var openSslVersionFull = ""
         var openSslReleaseDate = ""
         val openSslVersionFile = requireFile(project.isolated.rootProject.projectDirectory.file("tdlib/openssl/${ndkVersion}/android-${sdkVariant.minSdk}/${abiVariant.filters.first()}/include/openssl/opensslv.h").asFile)
@@ -862,6 +861,13 @@ android {
         ))
         put("OPENSSL_RELEASE_DATE", BuildConfigField(
           "String", "\"$openSslReleaseDate\"", null
+        ))
+  */
+        put("OPENSSL_VERSION_FULL", BuildConfigField(
+          "String", "\"libressl\"", null
+        ))
+        put("OPENSSL_RELEASE_DATE", BuildConfigField(
+          "String", "\"libressl\"", null
         ))
       }
 

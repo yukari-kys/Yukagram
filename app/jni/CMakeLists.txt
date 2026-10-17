@@ -86,24 +86,24 @@ endif()
 
 add_library(crypto SHARED IMPORTED)
 set_target_properties(crypto PROPERTIES IMPORTED_LOCATION
-  ${TDLIB_DIR}/openssl/${ANDROID_NDK_REVISION}/${ANDROID_PLATFORM}/${ANDROID_ABI}/lib/libcryptox.so
+  ${TDLIB_DIR}/bin/${ANDROID_ABI}/libressl/lib/libcrypto.so
 )
 add_library(ssl SHARED IMPORTED)
 set_target_properties(ssl PROPERTIES IMPORTED_LOCATION
-  ${TDLIB_DIR}/openssl/${ANDROID_NDK_REVISION}/${ANDROID_PLATFORM}/${ANDROID_ABI}/lib/libsslx.so
+  ${TDLIB_DIR}/bin/${ANDROID_ABI}/libressl/lib/libssl.so
 )
 if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.11.0")
   target_include_directories(crypto INTERFACE
-    ${TDLIB_DIR}/openssl/${ANDROID_NDK_REVISION}/${ANDROID_PLATFORM}/${ANDROID_ABI}/include
+    ${TDLIB_DIR}/bin/${ANDROID_ABI}/libressl/include
   )
   target_include_directories(ssl INTERFACE
-    ${TDLIB_DIR}/openssl/${ANDROID_NDK_REVISION}/${ANDROID_PLATFORM}/${ANDROID_ABI}/include
+    ${TDLIB_DIR}/bin/${ANDROID_ABI}/libressl/include
   )
 endif()
 
 add_library(tdjni SHARED IMPORTED)
 set_target_properties(tdjni PROPERTIES IMPORTED_LOCATION
-  ${TDLIB_DIR}/src/main/libs/${ANDROID_NDK_REVISION}/${ANDROID_PLATFORM}/${ANDROID_ABI}/libtdjni.so
+  ${TDLIB_DIR}/bin/${ANDROID_ABI}/tdlib/libtdjni.so
 )
 target_link_libraries(tdjni INTERFACE crypto ssl)
 
