@@ -40,7 +40,7 @@ android {
       "${webrtcDir}/modules/audio_device/android/java/src",
       "${webrtcDir}/sdk/android/api",
       "${webrtcDir}/sdk/android/src/java",
-      "../thirdparty/WebRTC/src/java"
+      "src/java"
     ))
   }
 
