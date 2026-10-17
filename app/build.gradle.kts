@@ -413,9 +413,10 @@ android {
     if (tdlibVersion.isEmpty()) {
       fatal("TDLib not found!")
     }
-
-    buildConfigString("TDLIB_VERSION", tdlibVersion)
 */
+    var tdlibVersion = "idk"
+    
+    buildConfigString("TDLIB_VERSION", tdlibVersion)
     val tgxGitVersionProvider = providers.of(GitInformationSource::class) {
       parameters.module = layout.projectDirectory
     }
@@ -458,6 +459,8 @@ android {
     buildConfigString("LIBRESSL_COMMIT", libreSslGit.commitHashShort)
     buildConfigString("LIBRESSL_COMMIT_URL", libreSslGit.commitUrl)
 */
+    buildConfigString("LIBRESSL_COMMIT", "idk")
+    buildConfigString("LIBRESSL_COMMIT_URL", "idk")
     // WebRTC version
 
     val webrtcGit = providers.of(GitInformationSource::class) {
@@ -874,11 +877,11 @@ android {
           "String", "\"$openSslReleaseDate\"", null
         ))
   */
-        put("OPENSSL_VERSION_FULL", BuildConfigField(
-          "String", "\"libressl\"", null
+        put("LIBRESSL_VERSION_FULL", BuildConfigField(
+          "String", "\"idk\"", null
         ))
-        put("OPENSSL_RELEASE_DATE", BuildConfigField(
-          "String", "\"libressl\"", null
+        put("LIBRESSL_RELEASE_DATE", BuildConfigField(
+          "String", "\"idk\"", null
         ))
       }
 
