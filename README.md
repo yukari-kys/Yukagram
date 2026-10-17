@@ -7,10 +7,12 @@ Telegram X fork
 Todo list:
 
 - [x] Fix polystar sticker crash
-- [ ] Prebuild tdlib with github workflow
+- [x] Prebuild tdlib with github workflow
+- [x] Github workflow for debug builds
 - [ ] Firebase push notifications
 - [ ] Yukagram settings
 - [ ] Interface changes
+- [ ] CI builds on telegram channel
 
 ## Build instructions
 
@@ -47,12 +49,9 @@ Todo list:
 
 ### Building
 
-1. `git clone --recursive https://github.com/yukari-sys/Yukagram ytg
-
+1. `git clone --recursive https://github.com/yukari-sys/Yukagram ytg`
 2. In case you forgot the `--recursive` flag, `cd` into `ytg` directory and run: `git submodule update --init --recursive`
-
 3. Open project via **[Android Studio](https://developer.android.com/studio/)** or build manually from the command line: `./gradlew assembleLatestUniversalDebug`
-
 4. If build fails, follow the instructions provided in the error message.
 
 #### Publishing
