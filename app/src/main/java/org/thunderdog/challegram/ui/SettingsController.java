@@ -1094,10 +1094,10 @@ public class SettingsController extends ViewController<Void> implements
     SourceCodeType.WEBRTC,
     SourceCodeType.FFMPEG,
     SourceCodeType.WEBP,
-    SourceCodeType.OPENSSL
+    SourceCodeType.LIBRESSL
   })
   private @interface SourceCodeType {
-    int TELEGRAM_X = 0, TDLIB = 1, TGCALLS = 2, WEBRTC = 3, FFMPEG = 4, WEBP = 5, OPENSSL = 6;
+    int TELEGRAM_X = 0, TDLIB = 1, TGCALLS = 2, WEBRTC = 3, FFMPEG = 4, WEBP = 5, LIBRESSL = 6;
   }
 
   private void viewSourceCode (@SourceCodeType int sourceCodeType) {
@@ -1125,8 +1125,8 @@ public class SettingsController extends ViewController<Void> implements
       case SourceCodeType.WEBP:
         url = BuildConfig.WEBP_COMMIT_URL;
         break;
-      case SourceCodeType.OPENSSL:
-        url = BuildConfig.OPENSSL_COMMIT_URL;
+      case SourceCodeType.LIBRESSL:
+        url = BuildConfig.LIBRESSL_COMMIT_URL;
         break;
       default:
         throw new IllegalArgumentException(Integer.toString(sourceCodeType));
@@ -1196,7 +1196,7 @@ public class SettingsController extends ViewController<Void> implements
         if (appBuildInfo.getTdlibCommitFull() != null) {
           b.item(new OptionItem(R.id.btn_tdlib, Lang.getCharSequence(R.string.format_commit, "TDLib " + Td.tdlibVersion(), Td.tdlibCommitHash()), OptionColor.NORMAL, R.drawable.baseline_tdlib_24));
         }
-        b.item(new OptionItem(R.id.btn_openssl, Lang.getCharSequence(R.string.format_commit, "OpenSSL " + BuildConfig.OPENSSL_VERSION_FULL, BuildConfig.OPENSSL_COMMIT), OptionColor.NORMAL, R.drawable.baseline_lock_24));
+        b.item(new OptionItem(R.id.btn_openssl, Lang.getCharSequence(R.string.format_commit, "LibreSSL " + BuildConfig.LIBRESSL_VERSION_FULL, BuildConfig.LIBRESSL_COMMIT), OptionColor.NORMAL, R.drawable.baseline_lock_24));
         b.item(new OptionItem(R.id.btn_tgcalls, Lang.getCharSequence(R.string.format_commit, "tgcalls", BuildConfig.TGCALLS_COMMIT), OptionColor.NORMAL, R.drawable.baseline_phone_in_talk_24));
         b.item(new OptionItem(R.id.btn_webrtc, Lang.getCharSequence(R.string.format_commit, "WebRTC", BuildConfig.WEBRTC_COMMIT), OptionColor.NORMAL, R.drawable.baseline_webrtc_24));
         b.item(new OptionItem(R.id.btn_ffmpeg, Lang.getCharSequence(R.string.format_commit, "FFmpeg", BuildConfig.FFMPEG_COMMIT), OptionColor.NORMAL, R.drawable.baseline_ffmpeg_24));
@@ -1213,7 +1213,7 @@ public class SettingsController extends ViewController<Void> implements
           } else if (id == R.id.btn_tdlib) {
             viewSourceCode(SourceCodeType.TDLIB);
           } else if (id == R.id.btn_openssl) {
-            viewSourceCode(SourceCodeType.OPENSSL);
+            viewSourceCode(SourceCodeType.LIBRESSL);
           } else if (id == R.id.btn_webrtc) {
             viewSourceCode(SourceCodeType.WEBRTC);
           } else if (id == R.id.btn_ffmpeg) {

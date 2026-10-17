@@ -60,7 +60,7 @@
 	branch = master
 [submodule "libsrtp"]
 	path = app/jni/tgvoip/third_party/libsrtp
-	url = https://github.com/cisco/libsrtp
+	url = https://github.com/yukari-sys/libsrtp
 	shallow = true
 	branch = main
 [submodule "openh264"]
