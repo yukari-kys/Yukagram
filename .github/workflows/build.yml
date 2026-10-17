@@ -3,13 +3,14 @@ name: Build Yukagram
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
 
 jobs:
   build:
     name: Build Release
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    timeout-minutes: 60
 
     steps:
       - name: Checkout
@@ -51,7 +52,13 @@ jobs:
           echo "keystore.file=keystore.properties" >> local.properties
 
       - name: Build APK
-        run: chmod +x ./gradlew && ./gradlew --no-daemon assembleLatestUniversalRelease
+        env:
+          GRADLE_OPTS: >-
+            -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=512m"
+            -Dorg.gradle.workers.max=1
+            -Dorg.gradle.daemon=false
+            -Dkotlin.compiler.execution.strategy=in-process
+        run: chmod +x ./gradlew && ./gradlew assembleLatestUniversalRelease
 
       - name: Upload APK artifacts
         uses: actions/upload-artifact@v4
