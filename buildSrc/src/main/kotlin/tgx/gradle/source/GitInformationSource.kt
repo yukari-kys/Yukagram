@@ -27,7 +27,8 @@ abstract class GitInformationSource : ValueSource<GitInformation, GitInformation
         commitHashLong = commit.name,
         commitDate = commit.commitTime.toLong(),
         remoteUrl = cleanRemoteUrl(repository.config.getString("remote", "origin", "url")),
-        commitAuthor = commit.authorIdent.name
+        commitAuthor = commit.authorIdent.name,
+        commitMessage = commit.shortMessage
       )
     }
   }

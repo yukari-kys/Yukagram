@@ -393,28 +393,15 @@ android {
 
     // Library versions in BuildConfig.java
 
-/*
-    var tdlibVersion = ""
     val tdlibGit = providers.of(GitInformationSource::class) {
-      parameters.module = layout.projectDirectory.dir("../tdlib/source/td")
+      parameters.module = layout.projectDirectory.dir("../tdlib/bin")
     }.get()
-    val tdlibVersionFile = requireFile(project.isolated.rootProject.projectDirectory.file("tdlib/source/td/CMakeLists.txt").asFile)
-    tdlibVersionFile.bufferedReader().use { reader ->
-      val regex = Regex("^project\\(TDLib VERSION (\\d+\\.\\d+\\.\\d+) LANGUAGES CXX C\\)$")
-      while (true) {
-        val line = reader.readLine() ?: break
-        val result = regex.find(line)
-        if (result != null) {
-          tdlibVersion = "${result.groupValues[1]}-${tdlibGit.commitHashShort}"
-          break
-        }
-      }
-    }
-    if (tdlibVersion.isEmpty()) {
-      fatal("TDLib not found!")
-    }
-*/
-    var tdlibVersion = "idk"
+
+    val (commitTdlib, commitLibressl) = tdlibGit.commitMessage
+      .split(" | ")
+      .map { it.substringAfter(": ") }
+    
+    var tdlibVersion = commitTdlib
     
     buildConfigString("TDLIB_VERSION", tdlibVersion)
     val tgxGitVersionProvider = providers.of(GitInformationSource::class) {
@@ -451,16 +438,11 @@ android {
       config.pullRequests.joinToString(", ") { "\"${it.author}\"" }
     }}")
 
-    // OpenSSL version
-/*
-    val libreSslGit = providers.of(GitInformationSource::class) {
-      parameters.module = layout.projectDirectory.dir("../tdlib/source/libressl")
-    }.get()
-    buildConfigString("LIBRESSL_COMMIT", libreSslGit.commitHashShort)
-    buildConfigString("LIBRESSL_COMMIT_URL", libreSslGit.commitUrl)
-*/
-    buildConfigString("LIBRESSL_COMMIT", "idk")
-    buildConfigString("LIBRESSL_COMMIT_URL", "idk")
+    // LibreSSL version
+
+    buildConfigString("LIBRESSL_COMMIT", commitLibressl)
+    buildConfigString("LIBRESSL_COMMIT_URL", "https://github.com/libressl/portable/tree/${commitLibressl}")
+
     // WebRTC version
 
     val webrtcGit = providers.of(GitInformationSource::class) {
@@ -844,44 +826,20 @@ android {
         put("ORIGINAL_VERSION_NAME", BuildConfigField(
           "String", "\"$baseVersionName.$baseVersionCode\"", null
         ))
-/*
-        var openSslVersionFull = ""
-        var openSslReleaseDate = ""
-        val openSslVersionFile = requireFile(project.isolated.rootProject.projectDirectory.file("tdlib/openssl/${ndkVersion}/android-${sdkVariant.minSdk}/${abiVariant.filters.first()}/include/openssl/opensslv.h").asFile)
-        openSslVersionFile.bufferedReader().use { reader ->
-          val regex = Regex("^# define (OPENSSL_FULL_VERSION_STR|OPENSSL_RELEASE_DATE)\\s*\"([^\"]+)\"$")
-          while (true) {
-            val line = reader.readLine() ?: break
-            val result = regex.find(line)
-            if (result != null) {
-              val varName = result.groupValues[1]
-              val value = result.groupValues[2]
-              when (varName) {
-                "OPENSSL_FULL_VERSION_STR" -> openSslVersionFull = value
-                "OPENSSL_RELEASE_DATE" -> openSslReleaseDate = value
-                else -> error(varName)
-              }
-              if (openSslVersionFull.isNotEmpty() && openSslReleaseDate.isNotEmpty()) {
-                break
-              }
-            }
-          }
-        }
-        if (openSslVersionFull.isEmpty()) {
-          fatal("OpenSSL not found!")
-        }
-        put("OPENSSL_VERSION_FULL", BuildConfigField(
-          "String", "\"$openSslVersionFull\"", null
-        ))
-        put("OPENSSL_RELEASE_DATE", BuildConfigField(
-          "String", "\"$openSslReleaseDate\"", null
-        ))
-  */
+
+        val tdlibGit = providers.of(GitInformationSource::class) {
+          parameters.module = layout.projectDirectory.dir("../tdlib/bin")
+        }.get()
+    
+        val (commitTdlib, commitLibressl) = tdlibGit.commitMessage
+          .split(" | ")
+          .map { it.substringAfter(": ") }
+    
         put("LIBRESSL_VERSION_FULL", BuildConfigField(
-          "String", "\"idk\"", null
+          "String", "\"${commitLibressl}\"", null
         ))
         put("LIBRESSL_RELEASE_DATE", BuildConfigField(
-          "String", "\"idk\"", null
+          "String", "\"${commitLibressl}\"", null
         ))
       }
 

@@ -8,7 +8,8 @@ data class GitInformation(
   val commitHashLong: String,
   val commitDate: Long,
   val remoteUrl: String,
-  val commitAuthor: String
+  val commitAuthor: String,
+  val commitMessage: String
 ) {
   init {
     if (URI.create(remoteUrl).host != "github.com") {
