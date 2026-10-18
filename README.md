@@ -92,7 +92,7 @@ keystore.file=/path/to/keystore.properties
 
 3. Build the release: `./gradlew assembleLatestUniversalRelease`
 
-### Building with dockerfile
+### Building with Docker (debug)
 
 Edit `local.properties`:
 
