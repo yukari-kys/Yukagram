@@ -92,6 +92,24 @@ keystore.file=/path/to/keystore.properties
 
 3. Build the release: `./gradlew assembleLatestUniversalRelease`
 
+### Building with dockerfile
+
+Edit `local.properties`:
+
+```properties
+sdk.dir=/opt/android-sdk
+```
+
+Build and run:
+
+```sh
+docker build -t yukagram-builder .
+docker run --rm \
+  -v "$PWD:/workspace" \
+  -v "$HOME/.gradle:/root/.gradle" \
+  yukagram-builder
+```
+
 ## License
 
 `Yukagram` is licensed under the terms of the GNU General Public License v3.0.
