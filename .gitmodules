@@ -111,9 +111,11 @@
 [submodule "thirdparty/androidx-media/latest"]
 	path = app/thirdparty/androidx-media/latest
 	url = https://github.com/androidx/media
+	shallow = true
 [submodule "app/jni/third_party/pixman"]
 	path = app/jni/third_party/pixman
 	url = https://gitlab.freedesktop.org/pixman/pixman.git
+	shallow = true
 [submodule "vkryl/leveldb/jni/leveldb"]
 	path = leveldb/jni/leveldb
 	url = https://github.com/google/leveldb
