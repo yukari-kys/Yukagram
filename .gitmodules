@@ -130,4 +130,3 @@
 	path = tdlib/bin
 	url = https://github.com/yukari-sys/tdlib
 	branch = build
-	shallow = true
