@@ -32,7 +32,7 @@ fun resolveGradleProperty(name: String): String? {
       }
       localProps!![name]?.toString() ?: let {
         if (appProps == null) {
-          appProps = readProperties("app.properties")
+          appProps = readProperties("version.properties")
         }
         appProps!![name]?.toString() ?: let {
           if (rootProps == null) {

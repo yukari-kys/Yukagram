@@ -24,29 +24,27 @@ abstract class AppConfigurationSource : ValueSource<ApplicationConfig, AppConfig
   interface Params : ValueSourceParameters {
     val version: RegularFileProperty
     val properties: RegularFileProperty
-    val app: RegularFileProperty
     val defaults: RegularFileProperty
   }
 
   override fun obtain(): ApplicationConfig {
     val version = loadProperties(parameters.version.get().asFile)
     val properties = loadProperties(parameters.properties.get().asFile)
-    val app = loadProperties(parameters.app.get().asFile)
     val defaults = loadProperties(parameters.defaults.get().asFile)
 
     val keystoreFilePath = properties.getProperty("keystore.file", "").takeIf {
-      !(app.getProperty("app.disable_signing")?.toBoolean() ?: false)
+      !(version.getProperty("app.disable_signing")?.toBoolean() ?: false)
     }
 
-    val applicationName = app.getOrThrow("app.name")
-    val applicationId = app.getOrThrow("app.id")
+    val applicationName = version.getOrThrow("app.name")
+    val applicationId = version.getOrThrow("app.id")
     val isExampleBuild = applicationId.matches(Regex(
       "^(?:com|org)\\.example(?:\\.[a-z]+)+$"
     ))
     val isExperimentalBuild =
       isExampleBuild ||
       keystoreFilePath == null ||
-        app.getProperty("app.experimental", "false") == "true"
+        version.getProperty("app.experimental", "false") == "true"
     val applicationExtension = getOrDefault(properties, "tgx.extension", defaults).also {
       require(it == "none" || it == "hms" || it == "google")
     }
@@ -105,16 +103,16 @@ abstract class AppConfigurationSource : ValueSource<ApplicationConfig, AppConfig
       extension =
         applicationExtension,
       sourceCodeUrl =
-        app.getProperty("app.sources_url", ""),
+        version.getProperty("app.sources_url", ""),
       isExperimentalBuild =
         isExperimentalBuild,
       isHuaweiBuild =
         applicationExtension == "hms",
       forceOptimize =
-        app.getProperty("app.forceoptimize")?.toBoolean() ?: false,
+        version.getProperty("app.forceoptimize")?.toBoolean() ?: false,
       doNotObfuscate =
         isExampleBuild ||
-          app.getProperty("app.dontobfuscate")?.toBoolean() ?: false,
+          version.getProperty("app.dontobfuscate")?.toBoolean() ?: false,
       telegramApiId =
         apiId,
       telegramApiHash =
@@ -124,15 +122,15 @@ abstract class AppConfigurationSource : ValueSource<ApplicationConfig, AppConfig
           keystoreFilePath != null
         },
       appDownloadUrl =
-        app.getOrThrow("app.download_url"),
+        version.getOrThrow("app.download_url"),
       googlePlayUrl =
-        app.getProperty("app.google_download_url", null),
+        version.getProperty("app.google_download_url", null),
       galaxyStoreUrl =
-        app.getProperty("app.galaxy_download_url", null),
+        version.getProperty("app.galaxy_download_url", null),
       huaweiAppGalleryUrl =
-        app.getProperty("app.huawei_download_url", null),
+        version.getProperty("app.huawei_download_url", null),
       amazonAppStoreUrl =
-        app.getProperty("app.amazon_download_url", null),
+        version.getProperty("app.amazon_download_url", null),
       pullRequests =
         properties.getProperty("pr.ids", "").split(',').filter { it.matches(Regex("^[0-9]+$")) }.map {
           PullRequest(it.toLong(), properties)
@@ -145,7 +143,7 @@ abstract class AppConfigurationSource : ValueSource<ApplicationConfig, AppConfig
 
       // version.properties
       applicationVersion =
-        app.getProperty("app.version", "0").toInt().takeIf { versionOverride ->
+        version.getProperty("app.version", "0").toInt().takeIf { versionOverride ->
           versionOverride > 0
         } ?:
         version.getOrThrow("version.app").toInt(),
