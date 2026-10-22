@@ -9,6 +9,8 @@ Todo list:
 - [x] Fix polystar sticker crash
 - [x] Prebuild tdlib with github workflow
 - [x] Github workflow for debug builds
+- [ ] Release builds using docker
+- [ ] "How to build tdlib myself"
 - [ ] Firebase push notifications
 - [ ] Yukagram settings
 - [ ] Interface changes
