@@ -1,0 +1,16 @@
+services:
+  debug:
+    build: .
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - ${HOME}/.gradle:/root/.gradle
+    command: ./gradlew assembleLatestUniversalDebug
+
+  release:
+    build: .
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - ${HOME}/.gradle:/root/.gradle
+    command: ./gradlew assembleLatestUniversalRelease
