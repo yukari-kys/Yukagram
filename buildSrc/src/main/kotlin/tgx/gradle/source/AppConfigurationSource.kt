@@ -67,14 +67,12 @@ abstract class AppConfigurationSource : ValueSource<ApplicationConfig, AppConfig
       }
     }
 
-    val sdkDir = properties.getOrThrow("sdk.dir").also {
-      if (it.isEmpty()) {
-        fatal("sdk.dir is not set")
+    val sdkDir: String = properties.getProperty("sdk.dir")
+      ?.takeIf { it.isNotEmpty() && it.none(Char::isWhitespace) }
+      ?: run {
+        System.err.println("Warning: sdk.dir is not set")
+        System.getenv("ANDROID_HOME").orEmpty()
       }
-      if (it.any(Char::isWhitespace)) {
-        fatal("sdk.dir contains whitespace: $it")
-      }
-    }
 
     val msys2Dir = if (isWindowsHost()) {
       properties.getOrThrow("msys2.dir").also {
