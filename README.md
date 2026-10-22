@@ -9,8 +9,8 @@ Todo list:
 - [x] Fix polystar sticker crash
 - [x] Prebuild tdlib with github workflow
 - [x] Github workflow for debug builds
-- [ ] Release builds using docker
-- [ ] "How to build tdlib myself"
+- [x] Release builds using docker
+- [x] "How to build tdlib myself"
 - [ ] Firebase push notifications
 - [ ] Yukagram settings
 - [ ] Interface changes
@@ -101,6 +101,16 @@ Run:
 ```sh
 docker compose run --rm debug # Debug
 docker compose run --rm release # Release
+```
+
+### Tdlib rebuilding
+
+By default, a pre-built version of TDLib from the [yukari-sys/tdlib build branch](https://github.com/yukari-sys/tdlib/tree/build) is used,
+but you can also compile it yourself from the same source code if you wish.
+
+```sh
+cd tdlib
+./build-tdlib.sh
 ```
 
 ## License
