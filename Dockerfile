@@ -57,7 +57,7 @@ RUN sdkmanager \
     "cmake;3.22.1"
 
 # Install Gradle
-ARG GRADLE_VERSION=9.1.0
+ARG GRADLE_VERSION=9.8.1
 
 ENV GRADLE_HOME=/opt/gradle
 ENV PATH="${GRADLE_HOME}/bin:${PATH}"
@@ -72,4 +72,6 @@ RUN wget -q \
 # Use existing mounted project directory; no checkout
 WORKDIR /workspace
 
-CMD ["bash", "-c", "chmod +x ./gradlew && ./gradlew assembleLatestUniversalDebug"]
+ENV GRADLE_USER_HOME="/workspace/.gradle"
+
+CMD ["./gradlew", "assembleLatestUniversalDebug"]

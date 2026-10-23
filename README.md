@@ -98,23 +98,18 @@ keystore.file=/path/to/keystore.properties
 
 3. Build the release: `./gradlew assembleLatestUniversalRelease`
 
-### Building with Docker (debug)
+### Building in container
 
-Edit `local.properties`:
-
-```properties
-sdk.dir=/opt/android-sdk
-```
-
-Build and run:
-
-```sh
-docker build -t yukagram-builder .
-docker run --rm \
-  -v "$PWD:/workspace" \
-  -v "$HOME/.gradle:/root/.gradle" \
-  yukagram-builder
-```
+1. Build the container: `docker build -t yukagram-builder .`
+2. Run it: `docker run --rm -it -v "$PWD:/workspace" yukagram-builder bash`
+3. Build as usual: `./gradlew assembleLatestUniversalDebug`
+   
+   OR:
+   
+   ```sh
+   docker run --rm -v "$PWD:/workspace" yukagram-builder
+   # runs ./gradlew assembleLatestUniversalDebug
+   ```
 
 ### Tdlib rebuilding
 
