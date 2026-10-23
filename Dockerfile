@@ -2,6 +2,7 @@ FROM debian:trixie-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
     ca-certificates \
@@ -16,6 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ninja-build \
     && rm -rf /var/lib/apt/lists/*
 
+# Install JDK 25 (Temurin)
 RUN mkdir -p /etc/apt/keyrings \
     && curl -fsSL https://packages.adoptium.net/artifactory/api/gpg/key/public \
        -o /etc/apt/keyrings/adoptium.asc \
@@ -28,10 +30,12 @@ RUN mkdir -p /etc/apt/keyrings \
 ENV JAVA_HOME=/usr/lib/jvm/temurin-25-jdk-amd64
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
+# Android SDK configuration
 ENV ANDROID_HOME=/opt/android-sdk
 ENV ANDROID_SDK_ROOT=/opt/android-sdk
 ENV PATH="${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${PATH}"
 
+# Install Android command-line tools
 ARG ANDROID_CMDLINE_TOOLS=13114758
 
 RUN mkdir -p "${ANDROID_HOME}/cmdline-tools" \
@@ -42,6 +46,7 @@ RUN mkdir -p "${ANDROID_HOME}/cmdline-tools" \
     && mv /tmp/android-tools/cmdline-tools "${ANDROID_HOME}/cmdline-tools/latest" \
     && rm -rf /tmp/android-tools /tmp/android-tools.zip
 
+# Accept licenses and install SDK packages
 RUN yes | sdkmanager --licenses >/dev/null 2>&1 || true
 
 RUN sdkmanager \
@@ -51,6 +56,7 @@ RUN sdkmanager \
     "platform-tools" \
     "cmake;3.22.1"
 
+# Install Gradle
 ARG GRADLE_VERSION=9.1.0
 
 ENV GRADLE_HOME=/opt/gradle
@@ -63,4 +69,7 @@ RUN wget -q \
     && mv "/opt/gradle-${GRADLE_VERSION}" "${GRADLE_HOME}" \
     && rm /tmp/gradle.zip
 
+# Use existing mounted project directory; no checkout
 WORKDIR /workspace
+
+CMD ["bash", "-c", "chmod +x ./gradlew && ./gradlew assembleLatestUniversalDebug"]
