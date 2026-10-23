@@ -125,6 +125,8 @@ import tgx.td.MessageId;
 import tgx.td.Td;
 import tgx.td.TdConstants;
 
+import com.github.yukagram.YuSettings;
+
 /**
  * All app-related settings.
  * <p>
@@ -836,6 +838,8 @@ public class Settings {
     return new File(pmcDir, "db");
   }
 
+  private final YuSettings yuSettings;
+
   private Settings () {
     File pmcDir = new File(AppContext.get().getFilesDir(), "pmc");
     boolean didNotExist = !pmcDir.exists();
@@ -869,6 +873,10 @@ public class Settings {
       }
     });
     Log.load(pmc);
+
+    /* Initialize Yukagram SETTINGS component */
+    yuSettings = new YuSettings();
+
     int pmcVersion;
     if (didNotExist) {
       pmcVersion = VERSION;
