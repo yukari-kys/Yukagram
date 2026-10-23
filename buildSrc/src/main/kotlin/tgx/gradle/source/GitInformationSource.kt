@@ -35,7 +35,7 @@ abstract class GitInformationSource : ValueSource<GitInformation, GitInformation
 
   companion object {
     private fun cleanRemoteUrl(remoteUrl: String): String {
-      val match = Regex("^(?:(https?|ssh)://)?(?:git@)?([a-zA-Z.0-9]+(?::\\d+)?)[/:]([a-zA-Z.0-9\\-_][a-zA-Z.0-9\\-_/]*)(?:\\.git)?$").matchEntire(remoteUrl)
+      val match = Regex("^(?:(https?|ssh)://)?(?:[^/@]+@)?(?:git@)?([a-zA-Z.0-9]+(?::\\d+)?)[/:]([a-zA-Z0-9._-][a-zA-Z0-9._/-]*)(?:\\.git)?$").matchEntire(remoteUrl)
       require(match != null && match.groupValues.size == 4) {
         "Failed to parse URL: $remoteUrl"
       }
