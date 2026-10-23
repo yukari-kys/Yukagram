@@ -10,11 +10,15 @@ Todo list:
 - [x] Prebuild tdlib with github workflow
 - [x] Github workflow for debug builds
 - [x] Release builds using docker
-- [x] "How to build tdlib myself"
+- [x] A way to rebuild tdlib
+- [x] Remove statusbar
+- [ ] Yukagram settings (database)
+- [ ] Modern UI
+- [ ] Precompile all the JNI's
+- [ ] App logo
 - [ ] Firebase push notifications
-- [ ] Yukagram settings
-- [ ] Interface changes
-- [ ] CI builds on telegram channel
+- [ ] CI builds in TG channel
+- [ ] First release
 
 ## Build instructions
 
