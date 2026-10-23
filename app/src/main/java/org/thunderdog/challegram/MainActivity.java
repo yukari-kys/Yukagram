@@ -483,9 +483,6 @@ public class MainActivity extends BaseActivity implements GlobalAccountListener,
       ll.addView(textView);
 
       int index = -1;
-      if (statusBar != null) {
-        index = rootView.indexOfChild(statusBar);
-      }
       rootView.addView(ll, index);
       optimizeLayout = ll;
       optimizeLayout.setAlpha(0f);
