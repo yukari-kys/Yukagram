@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <color name="app_launcher_background">#8D6DFF</color>
+
   <color name="header_light_pressed">#88ffffff</color>
   <color name="swirl_ridgeColor">#ff000000</color>
   <color name="swirl_errorColor">#ff000000</color>
