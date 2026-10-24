@@ -19,5 +19,5 @@ keystore.file=
 telegram.api_id=6
 telegram.api_hash=eb06d4abfb49dc3eeb1aeb98ae0f581e
 
-## Extension module to apply. One of: none, hms, google
+## Extension module to apply. One of: none, google
 tgx.extension=none
