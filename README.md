@@ -2,7 +2,7 @@
 
 Telegram X fork
 
-* [**Latest nightly build**](https://nightly.link/yukari-sys/Yukagram/workflows/build/main/yukagram-release.zip)
+* [**Latest workflow builds**](https://github.com/yukari-sys/Yukagram/actions?query=is%3Asuccess+workflow%3A%22Build+Yukagram%22+branch%3Amain)
 
 Todo list:
 
