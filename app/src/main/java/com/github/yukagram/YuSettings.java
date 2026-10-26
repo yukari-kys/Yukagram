@@ -12,12 +12,19 @@ import org.drinkmore.Tracer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
+
 public class YuSettings {
 
     public static final int VERSION = 1;
 
+    // Keys
+
     public static final String KEY_VERSION = "version";
+    public static final String KEY_HIDE_CONNECTION_STATUS_BAR = "hide_connection_status_bar";
+
+    // Defaults
+
+    public static final boolean DEFAULT_HIDE_CONNECTION_STATUS_BAR = true;
 
     private static YuSettings instance;
 
@@ -99,5 +106,13 @@ public class YuSettings {
         Log.i("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⡿⢠⠟⠒⠋⠉⠉⠉⠉⠻⠿⢿⣿⠀⠀⠀⠿⣿⣿⠁⠀⠀⠛⠿⢟⣿⠇⠀⠀⠻⠿⠿⣛⣿⠁⠀⠀⠀⠀⠀");
         Log.i("⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⡿⣋⣤⣴⣶⣶⣶⣶⣦⣄⡀⢀⣴⣿⣿⣷⣄⣠⣾⡿⠿⣿⣶⣤⣀⣴⣿⢿⣶⣦⣄⣀⣴⣾⡿⠋⠀⠀⠀⠀⠀⠀");
         Log.i("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠻⠿⠛⠉⠉⠀⠀⠉⠙⠻⠿⠿⠟⠁⠈⠛⠛⠛⠋⠀⠀⠀⠉⠛⠛⠛⠁⠀⠉⠙⠛⠛⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀");
+    }
+
+    public boolean isConnectionStatusBarHidden() {
+        return leveldb.getBoolean(KEY_HIDE_CONNECTION_STATUS_BAR, DEFAULT_HIDE_CONNECTION_STATUS_BAR);
+    }
+
+    public void setConnectionStatusBarHidden(boolean value) {
+        leveldb.putBoolean(KEY_HIDE_CONNECTION_STATUS_BAR, value);
     }
 }

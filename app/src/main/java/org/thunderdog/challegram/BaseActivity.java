@@ -69,6 +69,8 @@ import androidx.collection.SparseArrayCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.yukagram.YuSettings;
+
 import org.drinkless.tdlib.TdApi;
 import org.drinkmore.Tracer;
 import org.thunderdog.challegram.component.attach.MediaLayout;
@@ -548,7 +550,7 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnTo
       setDarkness(darkness);
     }*/
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    if (!YuSettings.getInstance().isConnectionStatusBarHidden()) {
       statusBar = new NetworkStatusBarView(this);
       statusBar.addThemeListeners(themeList);
       rootView.addView(statusBar);
