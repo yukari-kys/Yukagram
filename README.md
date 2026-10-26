@@ -15,6 +15,7 @@ Todo list:
 - [x] Yukagram settings
 - [x] App logo
 - [x] CI builds in TG channel
+- [x] Disable in-app updates
 - [ ] Login via Auth key
 - [ ] Login via QR-Code
 - [ ] Demo login servers
@@ -22,7 +23,6 @@ Todo list:
 - [ ] Modernize UI
 - [ ] Precompile all the JNI's
 - [ ] Firebase push notifications
-- [ ] Disable in-app updates
 - [ ] First release
 - [ ] In-app updates from TG channel
 
