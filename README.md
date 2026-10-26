@@ -16,6 +16,7 @@ Todo list:
 - [x] App logo
 - [x] CI builds in TG channel
 - [x] Disable in-app updates
+- [ ] Monet theme
 - [ ] Login via Auth key
 - [ ] Login via QR-Code
 - [ ] Demo login servers
