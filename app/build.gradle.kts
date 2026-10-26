@@ -477,17 +477,8 @@ android {
 
     // Set application version
 
-    val timeZone = TimeZone.getTimeZone("UTC")
-    val then = Calendar.getInstance(timeZone)
-    then.timeInMillis = config.creationDateMillis
-    val now = Calendar.getInstance(timeZone)
-    now.timeInMillis = tgxGit.commitDate * 1000L
-    if (now.timeInMillis < then.timeInMillis)
-      fatal("Invalid commit time!")
-    val minorVersion = monthYears(now, then)
-
     versionCode = config.applicationVersion
-    versionName = "${config.majorVersion}.${minorVersion}"
+    versionName = "${config.majorVersion}.${config.minorVersion}"
   }
 
   sourceSets.getByName("main") {

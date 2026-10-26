@@ -87,6 +87,7 @@ data class ApplicationConfig(
 
   val applicationVersion: Int,
   val majorVersion: Int,
+  val minorVersion: String,
 
   val isExperimentalBuild: Boolean,
   val isHuaweiBuild: Boolean,
@@ -110,7 +111,6 @@ data class ApplicationConfig(
   val pullRequests: List<PullRequest>,
 
   val outputFileNamePrefix: String,
-  val creationDateMillis: Long,
 
   val keystorePropertiesPath: String?
 )
