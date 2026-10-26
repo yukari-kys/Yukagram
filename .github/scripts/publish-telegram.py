@@ -26,6 +26,7 @@ def check_is_head():
 async def main():
     async with Bot(BOT_TOKEN) as bot:
         files = glob.glob("./*.apk")
+        files = [i for i in files if not i.endswith("-debug.apk")]
 
         caption = (
             f"**[{COMMIT_ID[:7]}]"
@@ -33,13 +34,22 @@ async def main():
             f"{COMMIT_MESSAGE}"
         )
 
+        media = []
+
         for i, path in enumerate(files):
-            with open(path, "rb") as f:
-                print("[bot] sending file:", path)
-                await bot.send_document(CHANNEL_ID, f,
-                    caption=caption if i == 0 else None,
-                    parse_mode="Markdown" if i == 0 else None,
-                )
+            print("[bot] adding file:", path)
+            media.append(InputMediaDocument(
+                media=open(path, "rb"),
+                filename=os.path.basename(path)
+            ))
+
+        print("[bot] sending files")
+        await bot.send_media_group(
+            chat_id=CHANNEL_ID,
+            media=media,
+            caption=caption,
+            parse_mode="Markdown",
+        )
 
 if __name__ == "__main__":
     if os.getenv("SKIP_HEAD_CHECK") or check_is_head():

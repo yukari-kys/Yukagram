@@ -161,7 +161,7 @@ jobs:
 
       - uses: actions/download-artifact@v8
         with:
-          pattern: yukagram-release-*
+          pattern: "*.apk"
           merge-multiple: true
 
       - name: Set up Python
