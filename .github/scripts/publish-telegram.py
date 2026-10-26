@@ -9,7 +9,7 @@ from telegram import Bot, InputMediaDocument
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 COMMIT_ID = os.getenv("GIT_COMMIT_ID")
 COMMIT_MESSAGE = os.getenv("GIT_COMMIT_MESSAGE")
-CHANNEL_ID = -1003808450964
+CHANNEL_ID = "@yukagram"
 
 def check_is_head():
     subprocess.run(["git", "fetch", "origin"], check=True)
@@ -26,7 +26,6 @@ def check_is_head():
 async def main():
     async with Bot(BOT_TOKEN) as bot:
         files = glob.glob("./*.apk")
-        files = [i for i in files if not i.endswith("-debug.apk")]
 
         caption = (
             f"**[{COMMIT_ID[:7]}]"
@@ -37,8 +36,7 @@ async def main():
         for i, path in enumerate(files):
             with open(path, "rb") as f:
                 print("[bot] sending file:", path)
-                await bot.send_document(
-                    CHANNEL_ID, f,
+                await bot.send_document(CHANNEL_ID, f,
                     caption=caption if i == 0 else None,
                     parse_mode="Markdown" if i == 0 else None,
                 )
