@@ -138,6 +138,7 @@ import org.thunderdog.challegram.util.Permissions;
 import org.thunderdog.challegram.widget.BaseRootLayout;
 import org.thunderdog.challegram.widget.DragDropLayout;
 import org.thunderdog.challegram.widget.ForceTouchView;
+import org.thunderdog.challegram.widget.NetworkStatusBarView;
 import org.thunderdog.challegram.widget.PopupLayout;
 import org.thunderdog.challegram.widget.RootFrameLayout;
 import org.thunderdog.challegram.widget.StickersSuggestionsLayout;
@@ -268,6 +269,9 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnTo
       }
     }
 
+    if (i == -1 && !ignoreStatusBar) {
+      i = statusBar != null ? rootView.indexOfChild(statusBar) : -1;
+    }
     int tooltipIndex = tooltipOverlayView != null ? rootView.indexOfChild(tooltipOverlayView) : -1;
     if (tooltipIndex != -1) {
       i = i == -1 ? tooltipIndex : Math.min(tooltipIndex, i);
@@ -458,14 +462,6 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnTo
     return 60.0f;
   }
 
-
-  // Language
-
-  @Override
-  public final void onLanguagePackEvent (int event, int arg1) {
-    Lang.hasDirectionChanged(event, arg1);
-  }
-
   private boolean isGestureNavigationEnabled;
 
   @Override
@@ -551,6 +547,12 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnTo
     if (darkness != 0) {
       setDarkness(darkness);
     }*/
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      statusBar = new NetworkStatusBarView(this);
+      statusBar.addThemeListeners(themeList);
+      rootView.addView(statusBar);
+    }
 
     setContentView(rootView);
 
@@ -840,6 +842,8 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnTo
   private static final boolean DISALLOW_ON_PAUSE = true;*/
 
   // Window flags & status bar
+
+  protected @Nullable NetworkStatusBarView statusBar;
 
   public final void setWindowFlags (int flags, int mask) {
     getWindow().setFlags(flags, mask);
@@ -1209,6 +1213,9 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnTo
       navigation.destroy();
     }
     Lang.removeLanguageListener(this);
+    if (statusBar != null) {
+      statusBar.performDestroy();
+    }
     TGLegacyManager.instance().removeEmojiListener(this);
     TdlibManager.instance().watchDog().onActivityDestroy(this);
     Intents.revokeFileReadPermissions();
@@ -1506,6 +1513,9 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnTo
   public void onKeyboardStateChanged (boolean visible) {
     navigation.onKeyboardStateChanged(visible);
     this.isKeyboardVisible = visible;
+    if (statusBar != null) {
+      statusBar.updateVisible();
+    }
   }
 
   @Override
@@ -3184,6 +3194,9 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnTo
       int contentHeight = layout.getMeasuredHeight();
       float translationY = -contentHeight * cameraFactor;
       layout.setTranslationY(translationY);
+      if (statusBar != null) {
+        statusBar.setTranslationY(translationY);
+      }
       camera.setContentShadowTop(translationY + contentHeight);
       updateHackyOverlaysPositions();
     }
@@ -3489,6 +3502,8 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnTo
     if (inlineResultsView != null) {
       inlineResultsView.getThemeProvider().onThemeColorsChanged(areTemp);
     }
+    if (statusBar != null && (!areTemp || ThemeManager.instance().hasColorChanged(Config.STATUS_BAR_COLOR_ID)))
+      statusBar.invalidate();
     if (tooltipOverlayView != null) {
       tooltipOverlayView.invalidate();
     }
@@ -3756,6 +3771,37 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnTo
 
   public void setOrientationLockFlagEnabled (int flag, boolean enabled) {
     setOrientationLockFlags(BitwiseUtils.setFlag(this.orientationFlags, flag, enabled));
+  }
+
+  // Language
+
+  @Override
+  public final void onLanguagePackEvent (int event, int arg1) {
+    boolean directionChanged = Lang.hasDirectionChanged(event, arg1);
+    if (directionChanged) {
+      if (statusBar != null) {
+        statusBar.updateDirection();
+      }
+    }
+
+
+    switch (event) {
+      case Lang.EVENT_DIRECTION_CHANGED:
+        break;
+      case Lang.EVENT_DATE_FORMAT_CHANGED:
+        break;
+
+      case Lang.EVENT_PACK_CHANGED: {
+        if (statusBar != null)
+          statusBar.updateText(0);
+        break;
+      }
+      case Lang.EVENT_STRING_CHANGED: {
+        if (statusBar != null)
+          statusBar.updateText(arg1);
+        break;
+      }
+    }
   }
 
   // Thumbnail API
