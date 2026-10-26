@@ -1211,14 +1211,7 @@ public class PhoneController extends EditBaseController<Void> implements Setting
         }
       }));
     });
-    if (mode == MODE_LOGIN) {
-      tdlib.context().checkDeviceToken(0, tokenVerified -> {
-        tdlib.checkConnectionParams();
-        act.runWithBool(tokenVerified);
-      });
-    } else {
-      act.runWithBool(false);
-    }
+    act.runWithBool(mode == MODE_LOGIN);
 
     return true;
   }
