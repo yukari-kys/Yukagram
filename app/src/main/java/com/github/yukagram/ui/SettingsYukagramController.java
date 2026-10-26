@@ -39,13 +39,16 @@ public class SettingsYukagramController extends RecyclerViewController<Void> imp
 
         if (itemId == R.id.btn_hideConnectionStatusBar) {
           view.getToggler().setRadioEnabled(YuSettings.getInstance().isConnectionStatusBarHidden(), isUpdate);
+        } else if (itemId == R.id.btn_hideCameraButton) {
+          view.getToggler().setRadioEnabled(YuSettings.getInstance().isHideCameraButton(), isUpdate);
         }
       }
     };
     List<ListItem> items = adapter.getItems();
 
     items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_hideConnectionStatusBar, 0, R.string.yu_HideConnectionStatusBar));
-//    items.add(new ListItem(ListItem.TYPE_INFO, 0, 0, R.string.yu_NothingHereYet));
+    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_hideCameraButton, 0, R.string.yu_HideCameraButton));
+    items.add(new ListItem(ListItem.TYPE_INFO, 0, 0, R.string.yu_HideCameraButtonDescription));
 
     recyclerView.setAdapter(adapter);
   }
@@ -57,9 +60,10 @@ public class SettingsYukagramController extends RecyclerViewController<Void> imp
     boolean needToRestart = false;
 
     if (viewId == R.id.btn_hideConnectionStatusBar) {
-      boolean value = adapter.toggleView(v);
-      YuSettings.getInstance().setConnectionStatusBarHidden(value);
+      YuSettings.getInstance().setConnectionStatusBarHidden(adapter.toggleView(v));
       needToRestart = true;
+    } else if (viewId == R.id.btn_hideCameraButton) {
+      YuSettings.getInstance().setHideCameraButton(adapter.toggleView(v));
     }
 
     if (needToRestart) {

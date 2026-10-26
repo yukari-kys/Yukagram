@@ -21,10 +21,12 @@ public class YuSettings {
 
     public static final String KEY_VERSION = "version";
     public static final String KEY_HIDE_CONNECTION_STATUS_BAR = "hide_connection_status_bar";
+    public static final String KEY_HIDE_CAMERA_BUTTON = "hide_camera_button";
 
     // Defaults
 
     public static final boolean DEFAULT_HIDE_CONNECTION_STATUS_BAR = true;
+    public static final boolean DEFAULT_HIDE_CAMERA_BUTTON = true;
 
     private static YuSettings instance;
 
@@ -114,5 +116,13 @@ public class YuSettings {
 
     public void setConnectionStatusBarHidden(boolean value) {
         leveldb.putBoolean(KEY_HIDE_CONNECTION_STATUS_BAR, value);
+    }
+
+    public boolean isHideCameraButton() {
+        return leveldb.getBoolean(KEY_HIDE_CAMERA_BUTTON, DEFAULT_HIDE_CAMERA_BUTTON);
+    }
+
+    public void setHideCameraButton(boolean value) {
+        leveldb.putBoolean(KEY_HIDE_CAMERA_BUTTON, value);
     }
 }

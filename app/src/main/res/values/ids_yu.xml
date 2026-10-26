@@ -3,4 +3,5 @@
   <item type="id" name="controller_yukagramSettings" />
   <item type="id" name="btn_yukagramSettings" />
   <item type="id" name="btn_hideConnectionStatusBar" />
+  <item type="id" name="btn_hideCameraButton" />
 </resources>

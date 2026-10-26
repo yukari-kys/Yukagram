@@ -64,6 +64,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.github.yukagram.YuSettings;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
@@ -11838,7 +11839,7 @@ public class MessagesController extends ViewController<MessagesController.Argume
   }
 
   public boolean isCameraButtonVisibleOnAttachPanel () {
-    return !canSelectSender();
+    return !YuSettings.getInstance().isHideCameraButton() && !canSelectSender();
   }
 
   public HapticMenuHelper.MenuItem createHapticSenderItem (int id, TdApi.MessageSender sender, boolean useUsername, boolean isLocked) {

@@ -36,6 +36,7 @@ import androidx.annotation.RequiresApi;
 import androidx.collection.LongSparseArray;
 
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.common.collect.Lists;
 
 import org.drinkless.tdlib.TdApi;
 import org.thunderdog.challegram.BaseActivity;
@@ -85,6 +86,7 @@ import org.thunderdog.challegram.widget.SendButton;
 import org.thunderdog.challegram.widget.ShadowView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -217,7 +219,7 @@ public class MediaLayout extends FrameLayoutFix implements
     this.target = target;
     this.rtl = Lang.rtl();
     this.needVote = false;
-    final MediaBottomBar.BarItem[] items;
+    MediaBottomBar.BarItem[] items;
     final int index;
 
     switch (mode) {
@@ -246,26 +248,18 @@ public class MediaLayout extends FrameLayoutFix implements
       }
       default: {
         this.needVote = tdlib().canSendPolls(getTargetChatId());
+
+        items = new MediaBottomBar.BarItem[]{
+          new MediaBottomBar.BarItem(R.drawable.baseline_person_24, R.string.AttachContact, ColorId.attachContact, Screen.dp(1f)),
+          new MediaBottomBar.BarItem(R.drawable.baseline_insert_drive_file_24, R.string.File, ColorId.attachFile),
+          new MediaBottomBar.BarItem(R.drawable.baseline_image_24, R.string.Gallery, ColorId.attachPhoto),
+          new MediaBottomBar.BarItem(R.drawable.baseline_location_on_24, R.string.Location, ColorId.attachLocation, Screen.dp(1f)),
+          needVote ?
+            new MediaBottomBar.BarItem(R.drawable.baseline_poll_24, R.string.CreatePoll, ColorId.attachInlineBot) :
+            new MediaBottomBar.BarItem(R.drawable.deproko_baseline_bots_24, R.string.InlineBot, ColorId.attachInlineBot)
+        };
         if (rtl) {
-          items = new MediaBottomBar.BarItem[]{
-            needVote ?
-              new MediaBottomBar.BarItem(R.drawable.baseline_poll_24, R.string.CreatePoll, ColorId.attachInlineBot) :
-              new MediaBottomBar.BarItem(R.drawable.deproko_baseline_bots_24, R.string.InlineBot, ColorId.attachInlineBot),
-            new MediaBottomBar.BarItem(R.drawable.baseline_location_on_24, R.string.Location, ColorId.attachLocation, Screen.dp(1f)),
-            new MediaBottomBar.BarItem(R.drawable.baseline_image_24, R.string.Gallery, ColorId.attachPhoto),
-            new MediaBottomBar.BarItem(R.drawable.baseline_insert_drive_file_24, R.string.File, ColorId.attachFile),
-            new MediaBottomBar.BarItem(R.drawable.baseline_person_24, R.string.AttachContact, ColorId.attachContact, Screen.dp(1f))
-          };
-        } else {
-          items = new MediaBottomBar.BarItem[]{
-            new MediaBottomBar.BarItem(R.drawable.baseline_person_24, R.string.AttachContact, ColorId.attachContact, Screen.dp(1f)),
-            new MediaBottomBar.BarItem(R.drawable.baseline_insert_drive_file_24, R.string.File, ColorId.attachFile),
-            new MediaBottomBar.BarItem(R.drawable.baseline_image_24, R.string.Gallery, ColorId.attachPhoto),
-            new MediaBottomBar.BarItem(R.drawable.baseline_location_on_24, R.string.Location, ColorId.attachLocation, Screen.dp(1f)),
-            needVote ?
-              new MediaBottomBar.BarItem(R.drawable.baseline_poll_24, R.string.CreatePoll, ColorId.attachInlineBot) :
-              new MediaBottomBar.BarItem(R.drawable.deproko_baseline_bots_24, R.string.InlineBot, ColorId.attachInlineBot)
-          };
+          items = Lists.reverse(Arrays.asList(items)).toArray(new MediaBottomBar.BarItem[0]);
         }
         index = 2;
         mode = MODE_DEFAULT;
@@ -300,24 +294,6 @@ public class MediaLayout extends FrameLayoutFix implements
     if (mode == MODE_DEFAULT) {
       addView(bottomBar);
       addView(shadowView);
-    }
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && false) { // FIXME
-      setElevation(Screen.dp(10f));
-      setTranslationZ(Screen.dp(1f));
-      setOutlineProvider(new android.view.ViewOutlineProvider() {
-        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-        @Override
-        public void getOutline (View view, android.graphics.Outline outline) {
-          int top = currentController.getCurrentHeight() + (int) currentController.getValue().getTranslationY();
-          int bottom = getMeasuredHeight();
-
-          int left = 0;
-          int right = getMeasuredWidth();
-
-          outline.setRect(left, top, right, bottom);
-        }
-      });
     }
 
     setLayoutParams(FrameLayoutFix.newParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
