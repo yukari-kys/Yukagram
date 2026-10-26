@@ -25,6 +25,8 @@ import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.yukagram.YuSettings;
+
 import org.drinkless.tdlib.TdApi;
 import org.thunderdog.challegram.R;
 import org.thunderdog.challegram.core.Lang;
@@ -106,6 +108,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsViewHolder> {
   private boolean needArchive, hasArchive;
 
   public void setNeedArchive (boolean needArchive) {
+    needArchive = !YuSettings.getInstance().isMoveArchiveToSidebar() && needArchive;
     if (this.needArchive != needArchive) {
       this.needArchive = needArchive;
       checkArchive();

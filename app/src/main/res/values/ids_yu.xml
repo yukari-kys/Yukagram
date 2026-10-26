@@ -4,4 +4,9 @@
   <item type="id" name="btn_yukagramSettings" />
   <item type="id" name="btn_hideConnectionStatusBar" />
   <item type="id" name="btn_hideCameraButton" />
+  <item type="id" name="btn_moveArchiveToSidebar" />
+  <item type="id" name="btn_hidePhoneNumbers" />
+  <item type="id" name="btn_hideSidebarButtonInviteFriends" />
+  <item type="id" name="btn_hideSidebarButtonNightMode" />
+  <item type="id" name="btn_hideSidebarButtonHelp" />
 </resources>

@@ -1766,10 +1766,12 @@ public class ProfileController extends ViewController<ProfileController.Args> im
           view.setName(getUsernameName());
           view.setData(getUsernameData());
         } else if (itemId == R.id.btn_phone) {
-          if (tdlib.isSelfUserId(user.id) && Settings.instance().needHidePhoneNumber()) {
-            view.setData(Strings.replaceNumbers(Strings.formatPhone(user.phoneNumber)));
-          } else if (!StringUtils.isEmpty(user.phoneNumber)) {
-            view.setData(Strings.formatPhone(user.phoneNumber));
+          if (!StringUtils.isEmpty(user.phoneNumber)) {
+            if (Settings.instance().needHidePhoneNumber()) {
+              view.setData(R.string.yu_TapToView);
+            } else {
+              view.setData(Strings.formatPhone(user.phoneNumber));
+            }
           } else {
             view.setData(R.string.PhoneNumberUnknown);
           }

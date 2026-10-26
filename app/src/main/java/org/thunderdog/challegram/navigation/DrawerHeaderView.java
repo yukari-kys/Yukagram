@@ -26,6 +26,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.github.yukagram.YuSettings;
+
 import org.drinkless.tdlib.TdApi;
 import org.thunderdog.challegram.FillingDrawable;
 import org.thunderdog.challegram.R;
@@ -320,7 +322,7 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
       if (account.hasUserInfo()) {
         name = account.getName();
         if (Settings.instance().needHidePhoneNumber()) {
-          phone = Strings.replaceNumbers(Strings.formatPhone(account.getPhoneNumber()));
+          phone = "@" + account.getUsername();
         } else {
           phone = Strings.formatPhone(account.getPhoneNumber());
         }

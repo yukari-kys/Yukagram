@@ -41,6 +41,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.yukagram.YuSettings;
+
 import org.drinkless.tdlib.Client;
 import org.drinkless.tdlib.TdApi;
 import org.thunderdog.challegram.R;
@@ -2485,7 +2487,7 @@ public class ChatsController extends TelegramViewController<ChatsController.Argu
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
       items.add(new ListItem(ListItem.TYPE_BUTTON, R.id.btn_editFolder, 0, R.string.EditFolder));
       items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
-    } else if (archiveList != null && archiveList.totalCount() > 0) {
+    } else if (archiveList != null && archiveList.totalCount() > 0 && !YuSettings.getInstance().isMoveArchiveToSidebar()) {
       items.add(new ListItem(ListItem.TYPE_ICONIZED_EMPTY, R.id.changePhoneText, R.drawable.baseline_archive_96, Lang.getMarkdownString(this, R.string.OpenArchiveHint), false));
       items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
       items.add(new ListItem(ListItem.TYPE_BUTTON, R.id.btn_archive, 0, R.string.OpenArchive));

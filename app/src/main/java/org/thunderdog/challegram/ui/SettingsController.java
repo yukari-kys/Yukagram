@@ -1043,7 +1043,7 @@ public class SettingsController extends ViewController<Void> implements
     if (user != null) {
       displayPhoneNumber = originalPhoneNumber = Strings.formatPhone(user.phoneNumber);
       if (Settings.instance().needHidePhoneNumber()) {
-        displayPhoneNumber = Strings.replaceNumbers(displayPhoneNumber);
+        displayPhoneNumber = Lang.getString(R.string.yu_TapToView);
       }
     } else {
       displayPhoneNumber = Lang.getString(R.string.LoadingPhone);

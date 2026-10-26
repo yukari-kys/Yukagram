@@ -7,4 +7,14 @@
   <string name="yu_HideCameraButtonDescription">Moves camera button from input bar into attachments menu</string>
   <string name="yu_RestartIsNeeded">You need to restart the app to see the changes.</string>
   <string name="yu_NothingHereYet">Nothing to see here yet :#</string>
+  <string name="yu_MoveArchiveToSidebar">Move archive button to drawer</string>
+  <string name="yu_HidePhoneNumbers">Hide phone numbers</string>
+  <string name="yu_HideSidebarButtonInviteFriends">Hide "Invite Friends" button from drawer</string>
+  <string name="yu_HideSidebarButtonNightMode">Hide "Night Mode" button from drawer</string>
+  <string name="yu_HideSidebarButtonHelp">Hide "Help" button from drawer</string>
+  <string name="yu_Annoyances">Annoyances</string>
+  <string name="yu_Sidebar">Drawer</string>
+  <string name="yu_Inputbar">Input bar</string>
+  <string name="yu_Privacy">Privacy</string>
+  <string name="yu_TapToView">Tap to view</string>
 </resources>

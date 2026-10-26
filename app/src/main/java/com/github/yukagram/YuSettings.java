@@ -22,11 +22,21 @@ public class YuSettings {
     public static final String KEY_VERSION = "version";
     public static final String KEY_HIDE_CONNECTION_STATUS_BAR = "hide_connection_status_bar";
     public static final String KEY_HIDE_CAMERA_BUTTON = "hide_camera_button";
+    public static final String KEY_MOVE_ARCHIVE_TO_SIDEBAR = "move_archive_to_sidebar";
+    public static final String KEY_HIDE_PHONE_NUMBERS = "hide_phone_numbers";
+    public static final String KEY_HIDE_SIDEBAR_BUTTON_INVITE_FRIENDS = "hide_sidebar_button_invite_friends";
+    public static final String KEY_HIDE_SIDEBAR_BUTTON_NIGHT_MODE = "hide_sidebar_button_night_mode";
+    public static final String KEY_HIDE_SIDEBAR_BUTTON_HELP = "hide_sidebar_button_help";
 
     // Defaults
 
     public static final boolean DEFAULT_HIDE_CONNECTION_STATUS_BAR = true;
     public static final boolean DEFAULT_HIDE_CAMERA_BUTTON = true;
+    public static final boolean DEFAULT_MOVE_ARCHIVE_TO_SIDEBAR = true;
+    public static final boolean DEFAULT_HIDE_PHONE_NUMBERS = true;
+    public static final boolean DEFAULT_HIDE_SIDEBAR_BUTTON_INVITE_FRIENDS = true;
+    public static final boolean DEFAULT_HIDE_SIDEBAR_BUTTON_NIGHT_MODE = true;
+    public static final boolean DEFAULT_HIDE_SIDEBAR_BUTTON_HELP = true;
 
     private static YuSettings instance;
 
@@ -124,5 +134,45 @@ public class YuSettings {
 
     public void setHideCameraButton(boolean value) {
         leveldb.putBoolean(KEY_HIDE_CAMERA_BUTTON, value);
+    }
+
+    public boolean isMoveArchiveToSidebar() {
+        return leveldb.getBoolean(KEY_MOVE_ARCHIVE_TO_SIDEBAR, DEFAULT_MOVE_ARCHIVE_TO_SIDEBAR);
+    }
+
+    public void setMoveArchiveToSidebar(boolean value) {
+        leveldb.putBoolean(KEY_MOVE_ARCHIVE_TO_SIDEBAR, value);
+    }
+
+    public boolean isHidePhoneNumbers() {
+        return leveldb.getBoolean(KEY_HIDE_PHONE_NUMBERS, DEFAULT_HIDE_PHONE_NUMBERS);
+    }
+
+    public void setHidePhoneNumbers(boolean value) {
+        leveldb.putBoolean(KEY_HIDE_PHONE_NUMBERS, value);
+    }
+
+    public boolean isHideSidebarButtonInviteFriends() {
+        return leveldb.getBoolean(KEY_HIDE_SIDEBAR_BUTTON_INVITE_FRIENDS, DEFAULT_HIDE_SIDEBAR_BUTTON_INVITE_FRIENDS);
+    }
+
+    public void setHideSidebarButtonInviteFriends(boolean value) {
+        leveldb.putBoolean(KEY_HIDE_SIDEBAR_BUTTON_INVITE_FRIENDS, value);
+    }
+
+    public boolean isHideSidebarButtonNightMode() {
+        return leveldb.getBoolean(KEY_HIDE_SIDEBAR_BUTTON_NIGHT_MODE, DEFAULT_HIDE_SIDEBAR_BUTTON_NIGHT_MODE);
+    }
+
+    public void setHideSidebarButtonNightMode(boolean value) {
+        leveldb.putBoolean(KEY_HIDE_SIDEBAR_BUTTON_NIGHT_MODE, value);
+    }
+
+    public boolean isHideSidebarButtonHelp() {
+        return leveldb.getBoolean(KEY_HIDE_SIDEBAR_BUTTON_HELP, DEFAULT_HIDE_SIDEBAR_BUTTON_HELP);
+    }
+
+    public void setHideSidebarButtonHelp(boolean value) {
+        leveldb.putBoolean(KEY_HIDE_SIDEBAR_BUTTON_HELP, value);
     }
 }

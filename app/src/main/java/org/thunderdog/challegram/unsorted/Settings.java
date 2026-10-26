@@ -6257,7 +6257,7 @@ public class Settings {
   }
 
   public boolean needHidePhoneNumber () {
-    return checkUtilityFeature(UTILITY_FEATURE_HIDE_NUMBER);
+    return YuSettings.getInstance().isHidePhoneNumbers() || checkUtilityFeature(UTILITY_FEATURE_HIDE_NUMBER);
   }
 
   public void setHidePhoneNumber (boolean enabled) {
