@@ -19,3 +19,6 @@ obj
 /local.properties
 
 libc++_shared.so
+
+**/src/generated
+**/src/**/generated
