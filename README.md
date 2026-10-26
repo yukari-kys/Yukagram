@@ -12,12 +12,12 @@ Todo list:
 - [x] Release builds using docker
 - [x] A way to rebuild tdlib
 - [x] Remove statusbar
-- [ ] Yukagram settings (database)
-- [ ] Modern UI
+- [x] Yukagram settings
+- [x] App logo
+- [x] CI builds in TG channel
+- [ ] Modernize UI
 - [ ] Precompile all the JNI's
-- [ ] App logo
 - [ ] Firebase push notifications
-- [ ] CI builds in TG channel
 - [ ] First release
 
 ## Build instructions
