@@ -29,6 +29,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.yukagram.YuSettings;
+
 import org.jetbrains.annotations.Nullable;
 import org.thunderdog.challegram.R;
 import org.thunderdog.challegram.component.attach.CustomItemAnimator;
@@ -108,7 +110,8 @@ public class EmojiHeaderView extends FrameLayout implements FactorAnimator.Targe
       themeProvider.addThemeInvalidateListener(this);
     }
 
-    addView(goToMediaPageSection, FrameLayoutFix.newParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.RIGHT));
+    if (!YuSettings.getInstance().isNewEmojiKeyboard())
+      addView(goToMediaPageSection, FrameLayoutFix.newParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.RIGHT));
 
     emojiHeaderViewNonPremium = new EmojiHeaderViewNonPremium(context);
     emojiHeaderViewNonPremium.init(emojiLayout, themeProvider, allowMedia);
@@ -151,10 +154,12 @@ public class EmojiHeaderView extends FrameLayout implements FactorAnimator.Targe
 
   public void setSelectedObjectByPosition (int i, boolean animated) {
     emojiHeaderViewNonPremium.setSelectedIndex(i - 1, animated);
-    setSelectedObject(adapter.getObject(i), animated);
+    setSelectedObject(adapter.getObject(i - (YuSettings.getInstance().isHideTrending() ? 1 : 0)), animated);
   }
 
-  private static final int OFFSET = 2;
+  private static int getOffset() {
+    return 2;
+  }
 
   private void setSelectedObject (Object obj, boolean animated) {
     if (!adapter.setSelectedObject(obj, animated, adapter.manager)) {
@@ -174,7 +179,7 @@ public class EmojiHeaderView extends FrameLayout implements FactorAnimator.Targe
         scrollX -= v.getLeft();
       }
 
-      if (section - OFFSET < first) {
+      if (section - getOffset() < first) {
         int desiredScrollX = section * itemWidth - itemWidth / 2 - itemWidth;
         int scrollLimit = scrollX + recyclerView.getPaddingLeft();
         int scrollValue = Math.max(desiredScrollX - scrollX, -scrollLimit);
@@ -185,8 +190,8 @@ public class EmojiHeaderView extends FrameLayout implements FactorAnimator.Targe
             recyclerView.scrollBy(scrollValue, 0);
           }
         }
-      } else if (section + OFFSET > last) {
-        int desiredScrollX = (int) Math.max(0, (section - sectionsCount + 1) * itemWidth + itemWidth * OFFSET + (emojiLayout.isAnimatedEmojiOnly() ? -itemWidth : itemWidth / 2f));
+      } else if (section + getOffset() > last) {
+        int desiredScrollX = (int) Math.max(0, (section - sectionsCount + 1) * itemWidth + itemWidth * getOffset() + (emojiLayout.isAnimatedEmojiOnly() ? -itemWidth : itemWidth / 2f));
         int scrollValue = desiredScrollX - scrollX;
         if (last != -1 && last == adapter.getItemCount() - 1) {
           View vr = adapter.manager.findViewByPosition(last);

@@ -23,6 +23,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.yukagram.YuSettings;
+
 import org.thunderdog.challegram.R;
 import org.thunderdog.challegram.component.attach.CustomItemAnimator;
 import org.thunderdog.challegram.config.Config;
@@ -47,10 +49,11 @@ public class MediaHeaderView extends RecyclerView {
 
   private MediaAdapter mediaAdapter;
   private EmojiLayout emojiLayout;
+  private boolean isGif;
   
   public MediaHeaderView (@NonNull Context context) {
     super(context);
-    
+
     setHasFixedSize(true);
     setItemAnimator(new CustomItemAnimator(AnimatorUtils.DECELERATE_INTERPOLATOR, 180));
     setOverScrollMode(Config.HAS_NICE_OVER_SCROLL_EFFECT ? OVER_SCROLL_IF_CONTENT_SCROLLS :OVER_SCROLL_NEVER);
@@ -60,9 +63,20 @@ public class MediaHeaderView extends RecyclerView {
     setLayoutParams(FrameLayoutFix.newParams(ViewGroup.LayoutParams.MATCH_PARENT, EmojiLayout.getHeaderSize()));
   }
   
-  public void init (EmojiLayout emojiLayout, ViewController<?> themeProvider, View.OnClickListener onClickListener) {
+  public void init (EmojiLayout emojiLayout, ViewController<?> themeProvider, View.OnClickListener onClickListener, boolean isGif) {
     this.emojiLayout = emojiLayout;
-    setAdapter(mediaAdapter = new MediaAdapter(getContext(), emojiLayout, onClickListener, emojiLayout.isAnimatedEmojiOnly() ? 8 : emojiLayout.getEmojiSectionsSize(), !emojiLayout.isAnimatedEmojiOnly() && Settings.instance().getEmojiMediaSection() == EmojiMediaType.GIF, themeProvider, emojiLayout.isAnimatedEmojiOnly()));
+    this.isGif = isGif;
+    this.mediaAdapter = new MediaAdapter(
+      getContext(),
+      emojiLayout,
+      onClickListener,
+      emojiLayout.isAnimatedEmojiOnly() ? 8 : emojiLayout.getEmojiSectionsSize(),
+      !emojiLayout.isAnimatedEmojiOnly() && Settings.instance().getEmojiMediaSection() == EmojiMediaType.GIF,
+      isGif,
+      themeProvider,
+      emojiLayout.isAnimatedEmojiOnly()
+    );
+    setAdapter(mediaAdapter);
   }
 
   public boolean hasRecents () {
@@ -218,29 +232,35 @@ public class MediaHeaderView extends RecyclerView {
     private final @Nullable ViewController<?> themeProvider;
 
     private Object selectedObject;
-    private boolean hasRecents, hasFavorite;
+    private boolean hasRecents, hasFavorite, isGif;
 
-    public MediaAdapter (Context context, EmojiLayout parent, OnClickListener onClickListener, int sectionItemCount, boolean selectedIsGifs, @Nullable ViewController<?> themeProvider, boolean hideSectionsExceptRecent) {
+    public MediaAdapter (Context context, EmojiLayout parent, OnClickListener onClickListener, int sectionItemCount, boolean selectedIsGifs, boolean isGif, @Nullable ViewController<?> themeProvider, boolean hideSectionsExceptRecent) {
       this.context = context;
       this.parent = parent;
+      this.isGif = isGif;
       this.onClickListener = onClickListener;
       this.themeProvider = themeProvider;
       this.headerItems = new ArrayList<>();
-      if (!hideSectionsExceptRecent) {
+      if (!hideSectionsExceptRecent && !YuSettings.getInstance().isNewEmojiKeyboard()) {
         this.headerItems.add(new EmojiSection(parent, -1, R.drawable.baseline_emoticon_outline_24, 0).setActiveDisabled());
         this.headerItems.add(new EmojiSection(parent, -2, R.drawable.deproko_baseline_gif_24, R.drawable.deproko_baseline_gif_filled_24));
-        this.headerItems.add(new EmojiSection(parent, -3, R.drawable.outline_whatshot_24, R.drawable.baseline_whatshot_24).setMakeFirstTransparent());
+        if (!YuSettings.getInstance().isHideTrending())
+          this.headerItems.add(new EmojiSection(parent, -3, R.drawable.outline_whatshot_24, R.drawable.baseline_whatshot_24).setMakeFirstTransparent());
       }
       // this.favoriteSection = new EmojiSection(parent, -4, R.drawable.baseline_star_border_24, R.drawable.baseline_star_24).setMakeFirstTransparent();
       this.recentSection = new EmojiSection(parent, -4, R.drawable.baseline_access_time_24, R.drawable.baseline_watch_later_24).setMakeFirstTransparent();
       this.trendingSection = new EmojiSection(parent, -5, R.drawable.outline_whatshot_24, R.drawable.baseline_whatshot_24).setMakeFirstTransparent();
       this.trendingSection.setIsTrending();
 
-      this.selectedObject = selectedIsGifs ? headerItems.get(1) : recentSection;
-      if (selectedIsGifs) {
-        this.headerItems.get(1).setFactor(1f, false);
+      if (!YuSettings.getInstance().isNewEmojiKeyboard()) {
+        this.selectedObject = selectedIsGifs ? headerItems.get(1) : recentSection;
+        if (selectedIsGifs) {
+          this.headerItems.get(1).setFactor(1f, false);
+        } else {
+          this.recentSection.setFactor(1f, false);
+        }
       } else {
-        this.recentSection.setFactor(1f, false);
+        this.selectedObject = recentSection;
       }
 
       this.sectionItemCount = sectionItemCount;
@@ -314,6 +334,10 @@ public class MediaHeaderView extends RecyclerView {
     private boolean showingTrendingSection;
 
     private void checkTrending () {
+      if (YuSettings.getInstance().isHideTrending()) {
+        showingTrendingSection = true;
+        return;
+      }
       boolean showTrending = hasTrending;
       if (this.showingTrendingSection != showTrending) {
         this.showingTrendingSection = showTrending;

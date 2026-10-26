@@ -28,6 +28,8 @@ public class YuSettings {
     public static final String KEY_HIDE_SIDEBAR_BUTTON_INVITE_FRIENDS = "hide_sidebar_button_invite_friends";
     public static final String KEY_HIDE_SIDEBAR_BUTTON_NIGHT_MODE = "hide_sidebar_button_night_mode";
     public static final String KEY_HIDE_SIDEBAR_BUTTON_HELP = "hide_sidebar_button_help";
+    public static final String KEY_NEW_EMOJI_KEYBOARD = "new_emoji_keyboard";
+    public static final String KEY_HIDE_TRENDING = "hide_trending";
 
     // Defaults
 
@@ -39,6 +41,8 @@ public class YuSettings {
     public static final boolean DEFAULT_HIDE_SIDEBAR_BUTTON_INVITE_FRIENDS = true;
     public static final boolean DEFAULT_HIDE_SIDEBAR_BUTTON_NIGHT_MODE = true;
     public static final boolean DEFAULT_HIDE_SIDEBAR_BUTTON_HELP = true;
+    public static final boolean DEFAULT_NEW_EMOJI_KEYBOARD = true;
+    public static final boolean DEFAULT_HIDE_TRENDING = true;
 
     private static YuSettings instance;
 
@@ -184,5 +188,21 @@ public class YuSettings {
 
     public void setHideSidebarButtonHelp(boolean value) {
         leveldb.putBoolean(KEY_HIDE_SIDEBAR_BUTTON_HELP, value);
+    }
+
+    public boolean isNewEmojiKeyboard() {
+        return leveldb.getBoolean(KEY_NEW_EMOJI_KEYBOARD, DEFAULT_NEW_EMOJI_KEYBOARD);
+    }
+
+    public void setNewEmojiKeyboard(boolean value) {
+        leveldb.putBoolean(KEY_NEW_EMOJI_KEYBOARD, value);
+    }
+
+    public boolean isHideTrending() {
+        return leveldb.getBoolean(KEY_HIDE_TRENDING, DEFAULT_HIDE_TRENDING);
+    }
+
+    public void setHideTrending(boolean value) {
+        leveldb.putBoolean(KEY_HIDE_TRENDING, value);
     }
 }

@@ -53,6 +53,10 @@ public class SettingsYukagramController extends RecyclerViewController<Void> imp
           view.getToggler().setRadioEnabled(YuSettings.getInstance().isHideSidebarButtonNightMode(), isUpdate);
         } else if (itemId == R.id.btn_hideSidebarButtonHelp) {
           view.getToggler().setRadioEnabled(YuSettings.getInstance().isHideSidebarButtonHelp(), isUpdate);
+        } else if (itemId == R.id.btn_newEmojiKeyboard) {
+          view.getToggler().setRadioEnabled(YuSettings.getInstance().isNewEmojiKeyboard(), isUpdate);
+        } else if (itemId == R.id.btn_hideTrending) {
+          view.getToggler().setRadioEnabled(YuSettings.getInstance().isHideTrending(), isUpdate);
         }
       }
     };
@@ -68,6 +72,11 @@ public class SettingsYukagramController extends RecyclerViewController<Void> imp
     items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_hideCameraButton, 0, R.string.yu_HideCameraButton));
     items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
     items.add(new ListItem(ListItem.TYPE_DESCRIPTION, 0, 0, R.string.yu_HideCameraButtonDescription));
+    items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_newEmojiKeyboard, 0, R.string.yu_NewEmojiKeyboard));
+    items.add(new ListItem(ListItem.TYPE_SEPARATOR));
+    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_hideTrending, 0, R.string.yu_HideTrending));
+    items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
 
     items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.yu_Sidebar));
     items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
@@ -118,6 +127,10 @@ public class SettingsYukagramController extends RecyclerViewController<Void> imp
     } else if (viewId == R.id.btn_hideSidebarButtonHelp) {
       YuSettings.getInstance().setHideSidebarButtonHelp(adapter.toggleView(v));
       needToRestart = true;
+    } else if (viewId == R.id.btn_newEmojiKeyboard) {
+      YuSettings.getInstance().setNewEmojiKeyboard(adapter.toggleView(v));
+    } else if (viewId == R.id.btn_hideTrending) {
+      YuSettings.getInstance().setHideTrending(adapter.toggleView(v));
     }
 
     if (needToRestart) {

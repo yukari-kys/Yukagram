@@ -10,4 +10,6 @@
   <item type="id" name="btn_hideSidebarButtonInviteFriends" />
   <item type="id" name="btn_hideSidebarButtonNightMode" />
   <item type="id" name="btn_hideSidebarButtonHelp" />
+  <item type="id" name="btn_newEmojiKeyboard" />
+  <item type="id" name="btn_hideTrending" />
 </resources>
