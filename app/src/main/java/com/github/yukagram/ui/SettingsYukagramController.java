@@ -43,6 +43,8 @@ public class SettingsYukagramController extends RecyclerViewController<Void> imp
           view.getToggler().setRadioEnabled(YuSettings.getInstance().isHideCameraButton(), isUpdate);
         } else if (itemId == R.id.btn_moveArchiveToSidebar) {
           view.getToggler().setRadioEnabled(YuSettings.getInstance().isMoveArchiveToSidebar(), isUpdate);
+        } else if (itemId == R.id.btn_moveCallsToSidebar) {
+          view.getToggler().setRadioEnabled(YuSettings.getInstance().isMoveCallsToSidebar(), isUpdate);
         } else if (itemId == R.id.btn_hidePhoneNumbers) {
           view.getToggler().setRadioEnabled(YuSettings.getInstance().isHidePhoneNumbers(), isUpdate);
         } else if (itemId == R.id.btn_hideSidebarButtonInviteFriends) {
@@ -70,6 +72,8 @@ public class SettingsYukagramController extends RecyclerViewController<Void> imp
     items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.yu_Sidebar));
     items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
     items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_moveArchiveToSidebar, 0, R.string.yu_MoveArchiveToSidebar));
+    items.add(new ListItem(ListItem.TYPE_SEPARATOR));
+    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_moveCallsToSidebar, 0, R.string.yu_MoveCallsToSidebar));
     items.add(new ListItem(ListItem.TYPE_SEPARATOR));
     items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_hideSidebarButtonInviteFriends, 0, R.string.yu_HideSidebarButtonInviteFriends));
     items.add(new ListItem(ListItem.TYPE_SEPARATOR));
@@ -99,6 +103,9 @@ public class SettingsYukagramController extends RecyclerViewController<Void> imp
       YuSettings.getInstance().setHideCameraButton(adapter.toggleView(v));
     } else if (viewId == R.id.btn_moveArchiveToSidebar) {
       YuSettings.getInstance().setMoveArchiveToSidebar(adapter.toggleView(v));
+      needToRestart = true;
+    } else if (viewId == R.id.btn_moveCallsToSidebar) {
+      YuSettings.getInstance().setMoveCallsToSidebar(adapter.toggleView(v));
       needToRestart = true;
     } else if (viewId == R.id.btn_hidePhoneNumbers) {
       YuSettings.getInstance().setHidePhoneNumbers(adapter.toggleView(v));

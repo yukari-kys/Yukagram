@@ -23,6 +23,7 @@ public class YuSettings {
     public static final String KEY_HIDE_CONNECTION_STATUS_BAR = "hide_connection_status_bar";
     public static final String KEY_HIDE_CAMERA_BUTTON = "hide_camera_button";
     public static final String KEY_MOVE_ARCHIVE_TO_SIDEBAR = "move_archive_to_sidebar";
+    public static final String KEY_MOVE_CALLS_TO_SIDEBAR = "move_calls_to_sidebar";
     public static final String KEY_HIDE_PHONE_NUMBERS = "hide_phone_numbers";
     public static final String KEY_HIDE_SIDEBAR_BUTTON_INVITE_FRIENDS = "hide_sidebar_button_invite_friends";
     public static final String KEY_HIDE_SIDEBAR_BUTTON_NIGHT_MODE = "hide_sidebar_button_night_mode";
@@ -33,6 +34,7 @@ public class YuSettings {
     public static final boolean DEFAULT_HIDE_CONNECTION_STATUS_BAR = true;
     public static final boolean DEFAULT_HIDE_CAMERA_BUTTON = true;
     public static final boolean DEFAULT_MOVE_ARCHIVE_TO_SIDEBAR = true;
+    public static final boolean DEFAULT_MOVE_CALLS_TO_SIDEBAR = true;
     public static final boolean DEFAULT_HIDE_PHONE_NUMBERS = true;
     public static final boolean DEFAULT_HIDE_SIDEBAR_BUTTON_INVITE_FRIENDS = true;
     public static final boolean DEFAULT_HIDE_SIDEBAR_BUTTON_NIGHT_MODE = true;
@@ -142,6 +144,14 @@ public class YuSettings {
 
     public void setMoveArchiveToSidebar(boolean value) {
         leveldb.putBoolean(KEY_MOVE_ARCHIVE_TO_SIDEBAR, value);
+    }
+
+    public boolean isMoveCallsToSidebar() {
+        return leveldb.getBoolean(KEY_MOVE_CALLS_TO_SIDEBAR, DEFAULT_MOVE_CALLS_TO_SIDEBAR);
+    }
+
+    public void setMoveCallsToSidebar(boolean value) {
+        leveldb.putBoolean(KEY_MOVE_CALLS_TO_SIDEBAR, value);
     }
 
     public boolean isHidePhoneNumbers() {

@@ -286,7 +286,7 @@ public class DrawerController extends ViewController<Void> implements View.OnCli
     }
 
     items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_contacts, R.drawable.baseline_perm_contact_calendar_24, R.string.Contacts));
-    if (Settings.instance().chatFoldersEnabled()) {
+    if (Settings.instance().chatFoldersEnabled() || YuSettings.getInstance().isMoveCallsToSidebar()) {
       items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_calls, R.drawable.baseline_call_24, R.string.Calls));
     }
     items.add(new ListItem(ListItem.TYPE_DRAWER_ITEM, R.id.btn_savedMessages, R.drawable.baseline_bookmark_24, R.string.SavedMessages));

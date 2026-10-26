@@ -62,6 +62,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.widget.TextViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.yukagram.YuSettings;
+
 import org.drinkless.tdlib.TdApi;
 import org.thunderdog.challegram.BaseActivity;
 import org.thunderdog.challegram.BuildConfig;
@@ -1500,7 +1502,7 @@ public class MainController extends ViewPagerController<Void> implements Menu, M
 
   @Override
   protected int getPagerItemCount () {
-    return hasFolders() ? pagerChatLists.size() : 2;
+    return hasFolders() ? pagerChatLists.size() : (YuSettings.getInstance().isMoveCallsToSidebar() ? 1 : 2);
   }
 
   protected long getPagerItemId (int position) {
@@ -1776,7 +1778,7 @@ public class MainController extends ViewPagerController<Void> implements Menu, M
     } else if (hasFolders()) {
       TdApi.ChatList chatList = pagerChatLists.get(position);
       c = newChatsController(chatList, getSelectedFilter(pagerItemId));
-    } else if (position == POSITION_CALLS) {
+    } else if (position == POSITION_CALLS && !YuSettings.getInstance().isMoveCallsToSidebar()) {
       c = new CallListController(this.context, tdlib);
     } else if (position == POSITION_PEOPLE) {
       c = new PeopleController(this.context, tdlib);
@@ -1802,10 +1804,13 @@ public class MainController extends ViewPagerController<Void> implements Menu, M
     if (hasFolders()) {
       throw new UnsupportedOperationException();
     }
-    return new CharSequence[] {
-      getMenuSectionName(MAIN_PAGER_ITEM_ID, /* pagerItemPosition */ 0, /* hasFolders */ false, ChatFolderStyle.LABEL_ONLY, /* upperCase */ true),
-      Lang.uppercase(Lang.getString(R.string.Calls))/*, UI.getString(R.string.Contacts).toUpperCase()*/
-    };
+    return YuSettings.getInstance().isMoveCallsToSidebar() ?
+      new CharSequence[]{
+        getMenuSectionName(MAIN_PAGER_ITEM_ID, /* pagerItemPosition */ 0, /* hasFolders */ false, ChatFolderStyle.LABEL_ONLY, /* upperCase */ true),
+      } : new CharSequence[] {
+        getMenuSectionName(MAIN_PAGER_ITEM_ID, /* pagerItemPosition */ 0, /* hasFolders */ false, ChatFolderStyle.LABEL_ONLY, /* upperCase */ true),
+        Lang.uppercase(Lang.getString(R.string.Calls))/*, UI.getString(R.string.Contacts).toUpperCase()*/
+      };
   }
 
   private List<ViewPagerTopView.Item> defaultSectionItems;
@@ -1860,11 +1865,12 @@ public class MainController extends ViewPagerController<Void> implements Menu, M
 
   private List<ViewPagerTopView.Item> getDefaultSectionItems () {
     if (defaultSectionItems == null) {
-      String callsItem = Lang.uppercase(Lang.getString(R.string.Calls));
-      defaultSectionItems = Arrays.asList(
-        getDefaultMainItem(),
-        new ViewPagerTopView.Item(callsItem)
-      );
+      defaultSectionItems = YuSettings.getInstance().isMoveCallsToSidebar() ?
+        Arrays.asList(getDefaultMainItem()) :
+        Arrays.asList(
+          getDefaultMainItem(),
+          new ViewPagerTopView.Item(Lang.uppercase(Lang.getString(R.string.Calls)))
+        );
     }
     return defaultSectionItems;
   }

@@ -2,6 +2,7 @@ package tgx.bridge
 
 import android.app.Application
 import android.content.Context
+import org.drinkless.tdlib.TdApi
 
 class DummyTokenRetriever : DeviceTokenRetriever("dummy") {
   override fun isAvailable(context: Context): Boolean = true

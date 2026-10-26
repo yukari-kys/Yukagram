@@ -151,6 +151,7 @@ public abstract class ViewPagerController<T> extends TelegramViewController<T> i
           throw new IllegalArgumentException("sections.size() != " + getPagerItemCount());
         }
         headerCell.getTopView().setItems(sections);
+        headerCell.getTopView().setVisibility(sections.size() <= 1 ? View.GONE : View.VISIBLE);
       }
     }
   }
@@ -226,6 +227,7 @@ public abstract class ViewPagerController<T> extends TelegramViewController<T> i
       }
       headerCell.getTopView().setOnItemClickListener(this);
       headerCell.getTopView().setItems(sections);
+      headerCell.getTopView().setVisibility(sections.size() <= 1 ? View.GONE : View.VISIBLE);
       addThemeInvalidateListener(headerCell.getTopView());
     }
 
