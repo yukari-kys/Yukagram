@@ -169,23 +169,19 @@ public class AppUpdater implements InstallStateUpdatedListener, FileUpdateListen
   }
 
   public void checkForUpdates () {
-    if (state == State.NONE) {
-      if (preferTelegramChannelFlow()) {
-        checkForTelegramChannelUpdates();
-      } else {
-        checkForGooglePlayUpdates();
-      }
-    } else if (state == State.AVAILABLE) {
-      offerUpdate();
-    }
+//    if (state == State.NONE) {
+//      if (preferTelegramChannelFlow()) {
+//        checkForTelegramChannelUpdates();
+//      } else {
+//        checkForGooglePlayUpdates();
+//      }
+//    } else if (state == State.AVAILABLE) {
+//      offerUpdate();
+//    }
   }
 
   private boolean preferTelegramChannelFlow () {
-    // TODO: add server config to force
-    if (googlePlayUpdateManager == null ||
-      forceTelegramChannelFlow) return true;
-    if (!googlePlayFlowError) return false;
-    return AppInstallationUtil.isAppSideLoaded(AppContext.get());
+    return true;
   }
 
   public static AppInstallationUtil.PublicMarketUrls publicMarketUrls () {
