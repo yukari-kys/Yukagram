@@ -20,4 +20,7 @@
   <string name="yu_TapToView">Tap to view</string>
   <string name="yu_NewEmojiKeyboard">New emoji keyboard</string>
   <string name="yu_HideTrending">Hide trending emojis and stickers</string>
+  <string name="yu_TabEmojis">Emoji</string>
+  <string name="yu_TabStickers">Stickers</string>
+  <string name="yu_TabGifs">GIFs</string>
 </resources>

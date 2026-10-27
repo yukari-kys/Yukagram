@@ -19,6 +19,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import androidx.annotation.DrawableRes;
@@ -30,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.github.yukagram.YuSettings;
+import com.github.yukagram.ui.widget.EmojiBottomBarView;
 
 import org.drinkless.tdlib.TdApi;
 import org.thunderdog.challegram.R;
@@ -261,6 +263,8 @@ public class EmojiLayout extends FrameLayoutFix implements ViewPager.OnPageChang
   private boolean allowPremiumFeatures;
   private boolean useDarkMode;
 
+  private EmojiBottomBarView bottomBarView;
+
   public EmojiToneHelper.Delegate getToneDelegate () {
     return parentController != null && parentController instanceof EmojiToneHelper.Delegate ? (EmojiToneHelper.Delegate) parentController : null;
   }
@@ -422,6 +426,13 @@ public class EmojiLayout extends FrameLayoutFix implements ViewPager.OnPageChang
     addView(headerView);
     addView(shadowView);
     addView(circleButton);
+
+    if (YuSettings.getInstance().isNewEmojiKeyboard()) {
+      bottomBarView = new EmojiBottomBarView(getContext());
+      bottomBarView.init(themeProvider, position);
+      bottomBarView.setOnClickListener(this);
+      addView(bottomBarView);
+    }
 
     checkBackground();
     // NewEmoji.instance().loadAllEmoji();
@@ -776,6 +787,14 @@ public class EmojiLayout extends FrameLayoutFix implements ViewPager.OnPageChang
 
       if (listener != null && newSection != -1) {
         listener.onSectionSwitched(this, newSection, prevSection);
+      }
+    } else if (YuSettings.getInstance().isNewEmojiKeyboard()) {
+      if (viewId == R.id.btn_tabEmojis) {
+        pager.setCurrentItem(0, true);
+      } else if (viewId == R.id.btn_tabGifs) {
+        pager.setCurrentItem(1, true);
+      } else if (viewId == R.id.btn_tabStickers) {
+        pager.setCurrentItem(2, true);
       }
     }
   }
@@ -1160,6 +1179,10 @@ public class EmojiLayout extends FrameLayoutFix implements ViewPager.OnPageChang
       setCircleVisible((hasLeft && position == 0) || (hasRight && position == 1), true, position == 0 ? R.drawable.baseline_backspace_24 : R.drawable.baseline_search_24, position == 0 ? -Screen.dp(BACKSPACE_OFFSET) : 0);
     }
     resetScrollState(false);
+
+    if (YuSettings.getInstance().isNewEmojiKeyboard() && bottomBarView != null) {
+      bottomBarView.setSelectedIndex(position);
+    }
   }
 
   private boolean affectHeight;

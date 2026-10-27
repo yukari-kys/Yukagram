@@ -12,4 +12,7 @@
   <item type="id" name="btn_hideSidebarButtonHelp" />
   <item type="id" name="btn_newEmojiKeyboard" />
   <item type="id" name="btn_hideTrending" />
+  <item type="id" name="btn_tabEmojis" />
+  <item type="id" name="btn_tabStickers" />
+  <item type="id" name="btn_tabGifs" />
 </resources>
