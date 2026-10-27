@@ -31,6 +31,10 @@ Todo list:
 - [ ] Avatar roundness customization
 - [ ] Remove not-bubble messages thingy
 - [ ] Completely rewrite the "Themes and Chats" tab
+- [ ] "Send with caption" for gifs
+- [ ] Stickers downloading
+- [ ] Video/audio messages downloading
+- [ ] Send file as video/audio message
 - [ ] Monet theme
 - [ ] Login via Auth key
 - [ ] Login via QR-Code
