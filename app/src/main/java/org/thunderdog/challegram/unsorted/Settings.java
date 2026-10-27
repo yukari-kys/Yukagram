@@ -3743,6 +3743,13 @@ public class Settings {
   }
 
   public int getEmojiMediaSection () {
+    if (YuSettings.getInstance().isNewEmojiKeyboard()) {
+      return new int[]{
+        EmojiMediaType.STICKER,
+        EmojiMediaType.GIF,
+        EmojiMediaType.STICKER
+      }[getEmojiPosition()];
+    }
     return getInt(KEY_EMOJI_MEDIA_SECTION, EmojiMediaType.STICKER);
   }
 
