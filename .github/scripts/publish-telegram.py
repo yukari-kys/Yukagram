@@ -26,7 +26,8 @@ def check_is_head():
 async def main():
     async with Bot(BOT_TOKEN) as bot:
         files = glob.glob("./*.apk")
-        files = [i for i in files if not i.endswith("-debug.apk")]
+        files = [i for i in files if not i.endswith("-debug.apk")]        
+        files = [i for i in files if not i.endswith("-google.apk")]
 
         caption = (
             f"**[{COMMIT_ID[:7]}]"
