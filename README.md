@@ -11,11 +11,16 @@ Todo list:
 - [x] Github workflow for debug builds
 - [x] Release builds using docker
 - [x] A way to rebuild tdlib
-- [x] Remove statusbar
+- [x] Hide connection status bar
 - [x] Yukagram settings
 - [x] App logo
-- [ ] CI builds in TG channel
 - [x] Disable in-app updates
+- [x] Hide Help/Invite friends from drawer
+- [x] Move calls, archive to the drawer
+- [x] Hide trending stickers/emojis
+- [x] Hide phone numbers
+- [x] Hide camera button from input bar
+- [ ] CI builds in TG channel
 - [ ] Redesign emoji keyboard (WIP)
 - [ ] Redesign dialogs view (MainActivity)
 - [ ] "My profile" button
