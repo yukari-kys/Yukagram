@@ -14,8 +14,18 @@ Todo list:
 - [x] Remove statusbar
 - [x] Yukagram settings
 - [x] App logo
-- [x] CI builds in TG channel
+- [ ] CI builds in TG channel
 - [x] Disable in-app updates
+- [ ] Redesign emoji keyboard (WIP)
+- [ ] Redesign dialogs view (MainActivity)
+- [ ] "My profile" button
+- [ ] Media/music player customizations
+- [ ] Apple emojis for reactions
+- [ ] Hiding premium stuff
+- [ ] Font size customization
+- [ ] Avatar roundness customization
+- [ ] Remove not-bubble messages thingy
+- [ ] Completely rewrite the "Themes and Chats" tab
 - [ ] Monet theme
 - [ ] Login via Auth key
 - [ ] Login via QR-Code
