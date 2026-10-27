@@ -20,8 +20,7 @@ Todo list:
 - [x] Hide trending stickers/emojis
 - [x] Hide phone numbers
 - [x] Hide camera button from input bar
-- [ ] CI builds in TG channel
-- [ ] Redesign emoji keyboard (WIP)
+- [x] Redesign emoji keyboard
 - [ ] Redesign dialogs view (MainActivity)
 - [ ] "My profile" button
 - [ ] Media/music player customizations
@@ -44,6 +43,7 @@ Todo list:
 - [ ] Precompile all the JNI's
 - [ ] Firebase push notifications
 - [ ] First release
+- [ ] CI builds in TG channel
 - [ ] In-app updates from TG channel
 
 ## Build instructions
