@@ -132,8 +132,8 @@ public class EmojiBottomBarView extends FrameLayoutFix {
       setSingleLine();
       setGravity(Gravity.LEFT);
       setEllipsize(TextUtils.TruncateAt.END);
-      setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15f);
-      setPadding(Screen.dp(7), Screen.dp(5), Screen.dp(7), Screen.dp(5));
+      setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14f);
+      setPadding(Screen.dp(12), Screen.dp(4), Screen.dp(12), Screen.dp(4));
 
       themeProvider.addThemeTextColorListener(this, ColorId.circleButtonOverlayIcon);
 
