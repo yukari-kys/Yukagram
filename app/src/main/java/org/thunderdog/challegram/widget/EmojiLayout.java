@@ -481,8 +481,6 @@ public class EmojiLayout extends FrameLayoutFix implements ViewPager.OnPageChang
   }
 
   public void setAllowMedia (boolean allowMedia) {
-    allowMedia = YuSettings.getInstance().isMoveArchiveToSidebar();
-    
     if (this.allowMedia != allowMedia) {
       this.allowMedia = allowMedia;
 
@@ -1068,7 +1066,7 @@ public class EmojiLayout extends FrameLayoutFix implements ViewPager.OnPageChang
 
     @Override
     public int getCount () {
-      return allowMedia ? ((YuSettings.getInstance().isNewEmojiKeyboard() ? 3 : 2) + (parent.hasGifs ? 0 : -1)) : 1;
+      return allowMedia ? ((YuSettings.getInstance().isNewEmojiKeyboard() ? (3 + (parent.hasGifs ? 0 : -1)) : 2)) : 1;
     }
 
     @Override
@@ -1118,7 +1116,7 @@ public class EmojiLayout extends FrameLayoutFix implements ViewPager.OnPageChang
         if (themeProvider != null) {
           c.bindThemeListeners(themeProvider);
         }
-        if (!parent.hasGifs) {
+        if (!parent.hasGifs && position == 1) {
           EmojiMediaListController mediaListController = new EmojiMediaListController(context.context(), context.tdlib(), false);
           mediaListController.setArguments(parent);
           cachedItems.put(2, mediaListController);
