@@ -1,13 +1,13 @@
 package com.github.yukagram.ui.widget;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.graphics.Outline;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,17 +16,13 @@ import androidx.annotation.NonNull;
 import org.thunderdog.challegram.FillingDrawable;
 import org.thunderdog.challegram.R;
 import org.thunderdog.challegram.navigation.ViewController;
-import org.thunderdog.challegram.support.RippleSupport;
 import org.thunderdog.challegram.support.ViewSupport;
 import org.thunderdog.challegram.theme.ColorId;
-import org.thunderdog.challegram.theme.Theme;
-import org.thunderdog.challegram.tool.DrawAlgorithms;
-import org.thunderdog.challegram.tool.Drawables;
 import org.thunderdog.challegram.tool.Fonts;
-import org.thunderdog.challegram.tool.Paints;
 import org.thunderdog.challegram.tool.Screen;
 import org.thunderdog.challegram.tool.Views;
 import org.thunderdog.challegram.widget.NoScrollTextView;
+import org.thunderdog.challegram.widget.ShadowView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +31,6 @@ import me.vkryl.android.AnimatorUtils;
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
 import me.vkryl.android.widget.FrameLayoutFix;
-import me.vkryl.core.ColorUtils;
-import me.vkryl.core.StringUtils;
 
 /*
 * Pill-alike bottom bar for emoji keyboard
@@ -46,6 +40,7 @@ public class EmojiBottomBarView extends FrameLayoutFix {
   private int currentSelectedIndex = -1;
   private List<Button> buttons;
   private LinearLayout linearLayout;
+  private ShadowView shadowView;
 
   public EmojiBottomBarView(@NonNull Context context) {
     super(context);
@@ -96,6 +91,18 @@ public class EmojiBottomBarView extends FrameLayoutFix {
     );
     layoutParams.setMargins(0, 0, 0, Screen.dp(15));
 
+    linearLayout.setOutlineProvider(new ViewOutlineProvider() {
+      @Override
+      public void getOutline(View view, Outline outline) {
+        outline.setRoundRect(
+          0,0,view.getWidth(),view.getHeight(),
+          Screen.dp(16.5f)
+        );
+      }
+    });
+
+    linearLayout.setElevation(3);
+
     addView(linearLayout, layoutParams);
 
     setLayoutParams(FrameLayoutFix.newParams(
@@ -138,13 +145,6 @@ public class EmojiBottomBarView extends FrameLayoutFix {
     for (TextView element : buttons) {
       element.setOnLongClickListener(onLongClickListener);
     }
-  }
-
-  @Override
-  protected void onDraw (Canvas c) {
-    int width = getMeasuredWidth();
-    int height = getMeasuredHeight();
-    super.onDraw(c);
   }
 
   public static class Button extends NoScrollTextView implements FactorAnimator.Target {
