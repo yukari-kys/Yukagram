@@ -148,14 +148,14 @@ abstract class AppConfigurationSource : ValueSource<ApplicationConfig, AppConfig
       build = BuildVersions(version),
       majorVersion =
         version.getOrThrow("version.major").toInt(),
-      minorVersion =
-        version.getOrThrow("version.minor"),
       nativeLibraryVersion =
         version.getProperty("version.jni"),
       leveldbVersion =
         version.getProperty("version.leveldb"),
       emojiVersion =
         version.getIntOrThrow("version.emoji"),
+      creationDateMillis =
+        version.getOrThrow("version.creation").toLong(),
     )
   }
 }
