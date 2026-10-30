@@ -65,6 +65,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.github.yukagram.YuSettings;
+import com.github.yukagram.ui.MainControllerInterface;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
@@ -4095,9 +4096,9 @@ public class MessagesController extends ViewController<MessagesController.Argume
       clearResetOnFocus();
       NavigationStack stack = navigationController().getStack();
       stack.destroyAllButSaveLast(1);
-      MainController c = new MainController(context, tdlib);
+      MainControllerInterface c = MainControllerInterface.create(context, tdlib);
       c.getValue();
-      stack.insert(c, 0);
+      stack.insert((ViewController<?>) c, 0);
     }
   }
 
